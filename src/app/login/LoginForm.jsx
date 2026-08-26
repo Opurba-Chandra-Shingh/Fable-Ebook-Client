@@ -14,8 +14,10 @@ import {
 } from '@heroui/react';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-// import { useAuth } from '@/hooks/use-auth';
-// import { showToast } from '@/lib/toast';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+
+
 
 const ROLE_REDIRECTS = {
   reader: '/dashboard/user',
@@ -24,68 +26,68 @@ const ROLE_REDIRECTS = {
 };
 
 export default function LoginForm() {
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-//   const { login, loginWithGoogle, restoreSession } = useAuth();
+  //   const router = useRouter();
+  //   const searchParams = useSearchParams();
+
+  const router = useRouter();
+
 
   const [formError, setFormError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-//   useEffect(() => {
-//     restoreSession?.();
-//   }, [restoreSession]);
 
-//   function redirectAfterLogin(role) {
-//     const redirectTo = searchParams.get('redirect');
-//     const destination = redirectTo || ROLE_REDIRECTS[role] || '/dashboard/user';
-//     router.push(destination);
-//   }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setFormError('');
 
-//   async function handleSubmit(e) {
-//     e.preventDefault();
-//     setFormError('');
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+    const email = String(data.email || '').trim();
+    const password = String(data.password || '');
 
-//     const data = Object.fromEntries(new FormData(e.currentTarget));
-//     const email = String(data.email || '').trim();
-//     const password = String(data.password || '');
+    setIsSubmitting(true);
 
-//     setIsSubmitting(true);
-//     try {
-//       const { role } = await login({ email, password });
-//       showToast.success('Welcome back to Fable.');
-//       redirectAfterLogin(role);
-//     } catch (err) {
-//       const code = err?.code;
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+        rememberMe: true,
+      });
 
-//       if (code === 'INVALID_CREDENTIALS') {
-//         setFormError('Email or password is incorrect.');
-//       } else if (code === 'ACCOUNT_NOT_FOUND') {
-//         setFormError('No account was found with these credentials.');
-//       } else {
-//         setFormError('Something went wrong. Please try again.');
-//         showToast.error('Something went wrong. Please try again.');
-//       }
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   }
+      if (error) {
+        throw new Error(error.message || 'Unable to sign in.');
+      }
 
-//   async function handleGoogleLogin() {
-//     setFormError('');
-//     setIsGoogleLoading(true);
-//     try {
-//       const { role } = await loginWithGoogle();
-//       showToast.success('Welcome back to Fable.');
-//       redirectAfterLogin(role);
-//     } catch (err) {
-//       setFormError('Something went wrong. Please try again.');
-//       showToast.error('Something went wrong. Please try again.');
-//     } finally {
-//       setIsGoogleLoading(false);
-//     }
-//   }
+      if (data) {
+        alert('Login successful');
+        router.push('/')
+      }
+    } catch (err) {
+      const message = err?.message || 'Something went wrong. Please try again.';
+
+      console.error('Login error:', err);
+      alert(message);
+      setFormError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  //   async function handleGoogleLogin() {
+  //     setFormError('');
+  //     setIsGoogleLoading(true);
+  //     try {
+  //       const { role } = await loginWithGoogle();
+  //       showToast.success('Welcome back to Fable.');
+  //       redirectAfterLogin(role);
+  //     } catch (err) {
+  //       setFormError('Something went wrong. Please try again.');
+  //       showToast.error('Something went wrong. Please try again.');
+  //     } finally {
+  //       setIsGoogleLoading(false);
+  //     }
+  //   }
 
   const isBusy = isSubmitting || isGoogleLoading;
 
@@ -108,7 +110,7 @@ export default function LoginForm() {
       )}
 
       <Form
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         validationBehavior="native"
         className="mt-6 flex flex-col gap-5"
       >

@@ -34,6 +34,10 @@ const books = [
 ];
 
 export default function LatestReleases() {
+
+    
+
+
     return (
         <section className="bg-background">
             <div className="mx-auto max-w-content px-6 py-16 md:px-10">

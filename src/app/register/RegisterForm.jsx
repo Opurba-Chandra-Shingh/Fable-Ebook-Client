@@ -1,4 +1,4 @@
-// components/register-form.jsx
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -14,8 +14,8 @@ import {
 } from '@heroui/react';
 import { Eye, EyeOff, Loader2, BookOpen, PenLine, Check } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-// import { useAuth } from '@/hooks/use-auth';
-// import { showToast } from '@/lib/toast';
+import { authClient } from '@/lib/auth-client';
+
 
 const ROLE_REDIRECTS = {
   reader: '/dashboard/user',
@@ -61,9 +61,9 @@ const STRENGTH_STYLES = {
 };
 
 export default function RegisterForm() {
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-//   const { register, loginWithGoogle } = useAuth();
+  //   const router = useRouter();
+  //   const searchParams = useSearchParams();
+  //   const { register, loginWithGoogle } = useAuth();
 
   const [role, setRole] = useState('reader');
   const [password, setPassword] = useState('');
@@ -89,44 +89,74 @@ export default function RegisterForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     setFormError('');
 
     if (isSubmitting) return;
 
     if (!confirmPassword || password !== confirmPassword) {
+      setFormError('Passwords do not match.');
       return;
     }
 
-    const formdata = Object.fromEntries(new FormData(e.currentTarget));
-    console.log("Register Data: ", formdata);
+    const formData = Object.fromEntries(new FormData(e.currentTarget));
 
+    const fullName = String(formData.fullName || '').trim();
+    const image = String(formData.image || '').trim();
+    const email = String(formData.email || '').trim();
+    const selectedRole = String(formData.role || 'reader');
 
-    // setIsSubmitting(true);
+    if (!fullName) {
+      setFormError('Full name is required.');
+      return;
+    }
 
-    // try {
-    //   const { role: assignedRole } = await register({
-    //     fullName,
-    //     email,
-    //     password,
-    //     role,
-    //   });
+    if (!email) {
+      setFormError('Email is required.');
+      return;
+    }
 
-    //   showToast.success('Welcome to Fable — your account is ready.');
-    //   redirectAfterRegister(assignedRole || role);
-    // } catch (err) {
-    //   const code = err?.code;
+    if (!password) {
+      setFormError('Password is required.');
+      return;
+    }
 
-    //   if (code === 'EMAIL_EXISTS') {
-    //     setFormError('An account with this email already exists.');
-    //   } else if (code === 'VALIDATION_ERROR') {
-    //     setFormError(err?.message || 'Please check the highlighted fields.');
-    //   } else {
-    //     setFormError('Unable to create your account. Please try again.');
-    //     showToast.error('Unable to create your account. Please try again.');
-    //   }
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+    console.log('Register Data:', {
+      fullName,
+      image,
+      email,
+      password,
+      role: selectedRole,
+    });
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await authClient.signUp.email({
+        name: fullName,
+        image,
+        email,
+        password,
+        role: selectedRole,
+      });
+
+      if (error) {
+        console.error('Signup Error:', error);
+        throw new Error(error.message || 'Unable to create your account.');
+      }
+
+      console.log('Signup Success:', data);
+
+      alert('Signup successful!');
+
+      // redirectAfterRegister(data?.user?.role || selectedRole);
+    } catch (error) {
+      console.error('Signup Error:', error);
+
+      setFormError(error?.message || 'Unable to create your account. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   async function handleGoogleSignup() {
@@ -176,6 +206,21 @@ export default function RegisterForm() {
 
           <FieldError className="text-xs text-red-500" />
         </TextField>
+
+
+
+        {/* image */}
+        <TextField name="image" type="text" autoComplete="image" isDisabled={isBusy} className="flex flex-col gap-1.5">
+          <Label className="text-sm font-medium text-[var(--text-primary)]">
+            Image link
+          </Label>
+
+          <Input placeholder="link" className="w-full rounded-input border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40 disabled:opacity-60 data-[invalid]:border-red-400" />
+
+          <FieldError className="text-xs text-red-500" />
+        </TextField>
+
+
 
 
         {/* Email */}
