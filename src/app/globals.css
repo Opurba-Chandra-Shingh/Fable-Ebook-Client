@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ========================================
+   FABLE DESIGN TOKENS
+======================================== */
+
+:root {
+  /* Background */
+  --background: #F7F3EB;
+  --background-secondary: #F0EAE0;
+
+  /* Surfaces */
+  --surface: #FFFFFF;
+  --surface-alt: #FDFBF7;
+
+  /* Typography */
+  --text-primary: #1C1917;
+  --text-secondary: #78716C;
+
+  /* Border */
+  --border: #E7E0D4;
+
+  /* Brand */
+  --accent: #C2703D;
+
+  /* Primary Button */
+  --button-primary-bg: #1C1917;
+  --button-primary-text: #FFFFFF;
+
+  /* Badge */
+  --badge-bg: #F0EAE0;
+  --badge-border: #E7E0D4;
+  --badge-text: #1C1917;
+
+  /* Fonts */
+  --font-serif: "Fraunces", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+
+/* ========================================
+   DARK THEME
+======================================== */
+
+.dark {
+  /* Background */
+  --background: #161211;
+  --background-secondary: #0D0A09;
+
+  /* Surfaces */
+  --surface: #1F1A17;
+  --surface-alt: #211C19;
+
+  /* Typography */
+  --text-primary: #F5F1EA;
+  --text-secondary: #9C948A;
+
+  /* Border */
+  --border: #2E2822;
+
+  /* Brand */
+  --accent: #C2703D;
+
+  /* Primary Button */
+  --button-primary-bg: #F5F1EA;
+  --button-primary-text: #161211;
+
+  /* Badge */
+  --badge-bg: #2E2822;
+  --badge-border: #2E2822;
+  --badge-text: #F5F1EA;
+}
+
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.font-serif-display {
+  font-family: var(--font-serif);
+}
