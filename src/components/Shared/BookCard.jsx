@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function BookCard({ book }) {
-  const { slug, coverImage, category, title, author, price } = book;
+  const { _id, coverImage, genre, title, author, price } = book;
 
   return (
     <Link
-      href={`/books/${slug}`}
+      href={`/browse/${_id}`}
       className="group block overflow-hidden rounded-card border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:shadow-subtle rounded-2xl"
     >
       {/* Cover image */}
@@ -28,7 +28,7 @@ export default function BookCard({ book }) {
       {/* Content */}
       <div className="p-4">
         <span className="inline-block rounded-full border border-badge-border bg-badge-bg px-2.5 py-1 text-[11px] font-medium text-badge-text">
-          {category}
+          {genre}
         </span>
 
         <h3 className="mt-3 font-serif text-base font-semibold leading-snug text-text-primary line-clamp-1">

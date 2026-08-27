@@ -26,8 +26,8 @@ export default function Navbar() {
     const currentUser = session?.user;
     const isAuthenticated = !!currentUser;
 
-    console.log('Logged in user from Navbar:', currentUser);
-    console.log('Session pending:', isPending);
+    // console.log('Logged in user from Navbar:', currentUser);
+    // console.log('Session pending:', isPending);
 
     const hndlSignOut = async () => {
         try {

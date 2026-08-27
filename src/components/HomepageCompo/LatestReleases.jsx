@@ -4,38 +4,14 @@ import BookCard from '../Shared/BookCard';
 import { MdChevronRight } from 'react-icons/md';
 import { SecondaryButton } from '../Shared/Buttons/SecondaryButton';
 import ViewAll from '../Shared/Buttons/ViewAll';
+import { getAllBooks } from '@/api/books';
 
-const books = [
-    {
-        slug: 'slow-craft1',
-        coverImage: '/assets/images/slow-craft.avif',
-        category: 'Self Development',
-        title: 'Slow Craft',
-        author: 'Amara Osei',
-        price: 6.99,
-    },
-    {
-        slug: 'slow-craft2',
-        coverImage: '/assets/images/slow-craft.avif',
-        category: 'Self Development',
-        title: 'Slow Craft',
-        author: 'Amara Osei',
-        price: 6.99,
-    },
-    {
-        slug: 'slow-craft3',
-        coverImage: '/assets/images/slow-craft.avif',
-        category: 'Self Development',
-        title: 'Slow Craft',
-        author: 'Amara Osei',
-        price: 6.99,
-    },
-    // ...more books
-];
 
-export default function LatestReleases() {
 
-    
+export default async function LatestReleases() {
+
+    const books = await getAllBooks();
+    // console.log("Books from Latest Release", books);
 
 
     return (
@@ -60,8 +36,8 @@ export default function LatestReleases() {
                 </div>
 
                 <div className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
-                    {books.map((book) => (
-                        <BookCard key={book.slug} book={book} />
+                    {books.slice(0, 4).map((book) => (
+                        <BookCard key={book._id} book={book} />
                     ))}
                 </div>
             </div>
