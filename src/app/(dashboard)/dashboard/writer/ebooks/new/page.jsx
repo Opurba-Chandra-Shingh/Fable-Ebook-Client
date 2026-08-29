@@ -1,11 +1,12 @@
-import React from 'react';
+// app/dashboard/writer/ebooks/new/page.jsx
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+import AddEbookForm from "./AddEbookForm";
+
+
+export const metadata = {
+  title: 'Create a New Ebook — Fable',
 };
 
-export default page;
+export default function AddEbookPage() {
+  return <AddEbookForm />;
+}

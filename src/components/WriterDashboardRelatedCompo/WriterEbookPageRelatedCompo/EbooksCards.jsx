@@ -1,7 +1,7 @@
 // components/dashboard/writer/ebooks/ebooks-cards.jsx
 
-import EbookRowActions from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EbookRowActions';
-import StatusBadge from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/StatusBadge';
+import EbookRowActions from './EbookRowActions';
+import StatusBadge from './StatusBadge';
 
 
 export default function EbooksCards({ ebooks, onTogglePublish, onDelete, updatingId }) {
