@@ -1,6 +1,7 @@
 import { Fraunces, Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import "./globals.css";
+// import "../globals.css"
 import Navbar from '@/components/Shared/Navbar';
 import Footer from '@/components/Shared/Footer';
 
@@ -30,9 +31,9 @@ export default function RootLayout({ children }) {
           defaultTheme="system"
           enableSystem
         >
-          <Navbar></Navbar>
+          
           <main>{children}</main>
-          <Footer></Footer>
+          
         </ThemeProvider>
       </body>
     </html>
