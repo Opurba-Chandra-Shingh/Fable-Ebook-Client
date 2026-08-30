@@ -1,4 +1,3 @@
-// components/shared/bookmark-ebook-card.jsx
 'use client';
 
 import Link from 'next/link';

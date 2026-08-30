@@ -1,4 +1,3 @@
-// components/dashboard/writer/empty-dashboard.jsx
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 

@@ -1,5 +1,3 @@
-// app/read/[id]/page.jsx
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getBookContent } from "@/api/books";

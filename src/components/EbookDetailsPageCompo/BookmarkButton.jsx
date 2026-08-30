@@ -1,4 +1,3 @@
-// components/bookmark-button.jsx
 'use client';
 
 import { useState } from 'react';

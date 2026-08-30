@@ -1,4 +1,3 @@
-// app/dashboard/admin/layout.jsx
 import { redirect } from 'next/navigation';
 
 import AdminSidebar from '@/components/AdminDashboardRelatedCompo/AdminSidebar';

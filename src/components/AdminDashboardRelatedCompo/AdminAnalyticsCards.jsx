@@ -1,4 +1,3 @@
-// components/dashboard/admin/analytics-cards.jsx
 import { Users, PenLine, ShoppingBag, Wallet } from 'lucide-react';
 
 export default function AdminAnalyticsCards({ analytics }) {

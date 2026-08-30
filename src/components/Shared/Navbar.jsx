@@ -23,9 +23,6 @@ export default function Navbar() {
     const currentUser = session?.user;
     const isAuthenticated = !!currentUser;
 
-    // console.log('Logged in user from Navbar:', currentUser);
-    // console.log('Session pending:', isPending);
-
     const dashlink = {
         admin: '/dashboard/admin',
         reader: '/dashboard/reader',
@@ -39,16 +36,6 @@ export default function Navbar() {
         { label: 'Writers', href: '/writers' },
         { label: 'About', href: '/about' },
     ];
-
-    // const hndlSignOut = async () => {
-    //     try {
-    //         await authClient.signOut();
-    //         router.refresh();
-    //         router.push('/');
-    //     } catch (error) {
-    //         console.error('Sign out failed:', error);
-    //     }
-    // };
 
     const loginButtonToggle = (
         <div>

@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/profile-header.jsx
 export default function ProfileHeader({ profile }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-card border border-[var(--border)] bg-[var(--surface)] p-6 sm:flex-row sm:items-center">

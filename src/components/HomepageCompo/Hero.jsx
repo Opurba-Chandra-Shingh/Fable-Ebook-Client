@@ -31,7 +31,6 @@ export default function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href="/browse"
-              // className="inline-flex items-center gap-2 rounded-btn bg-button-primary-bg px-5 py-3 text-sm font-medium text-button-primary-text transition-opacity hover:opacity-90"
               >
                 <PrimaryButton className='flex items-center'>
                   Browse the library
@@ -41,7 +40,6 @@ export default function Hero() {
 
               <Link
                 href="/write"
-                // className="inline-flex items-center gap-2 rounded-btn border border-border px-5 py-3 text-sm font-medium text-text-primary transition-colors hover:bg-background-secondary"
               >
                 <SecondaryButton>
                   Start writing

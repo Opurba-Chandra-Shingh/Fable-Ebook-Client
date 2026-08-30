@@ -1,4 +1,3 @@
-// components/dashboard/writer/top-ebooks.jsx
 import Link from 'next/link';
 
 export default function TopEbooks({ books }) {

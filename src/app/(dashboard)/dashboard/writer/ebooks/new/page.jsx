@@ -1,5 +1,3 @@
-// app/dashboard/writer/ebooks/new/page.jsx
-
 import { getUserSession } from "@/session/session";
 import AddEbookForm from "./AddEbookForm";
 

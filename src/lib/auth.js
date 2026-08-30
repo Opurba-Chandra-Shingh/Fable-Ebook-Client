@@ -7,8 +7,7 @@ const db = client.db('fableEbook');
 
 export const auth = betterAuth({
     database: mongodbAdapter(db, {
-        // Optional: if you don't provide a client, database transactions won't be enabled.
-        client
+        client // needed for transactions
     }),
     emailAndPassword: {
         enabled: true,
@@ -36,9 +35,7 @@ export const auth = betterAuth({
     databaseHooks: {
         user: {
             create: {
-                // The public sign-up endpoint would otherwise accept role: 'admin'
-                // straight from the request body. Only 'reader'/'writer' may be
-                // self-selected at sign-up; admins are promoted via the admin panel.
+                // block self-signup as admin — that only happens via the admin panel
                 before: async (user) => {
                     if (user.role !== 'writer') {
                         return { data: { ...user, role: 'reader' } };

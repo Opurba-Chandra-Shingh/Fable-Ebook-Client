@@ -11,8 +11,6 @@ import { getAllBooks } from '@/api/books';
 export default async function LatestReleases() {
 
     const books = await getAllBooks();
-    // console.log("Books from Latest Release", books);
-
 
     return (
         <section className="bg-background">

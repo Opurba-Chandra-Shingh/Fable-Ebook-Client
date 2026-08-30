@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/public-profile-preview.jsx
 import Link from 'next/link';
 
 export default function PublicProfilePreview({ writerId, avatarUrl, name, bio }) {

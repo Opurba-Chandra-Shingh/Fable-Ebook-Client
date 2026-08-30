@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/empty-ebooks.jsx
 import Link from 'next/link';
 import { Library } from 'lucide-react';
 

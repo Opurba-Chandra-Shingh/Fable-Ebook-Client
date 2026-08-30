@@ -1,4 +1,3 @@
-// components/dashboard/reader/continue-reading.jsx
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 

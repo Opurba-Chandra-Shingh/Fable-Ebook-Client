@@ -1,5 +1,3 @@
-// app/browse/page.jsx
-
 import { searchBooks } from "@/api/books";
 import BookCard from "@/components/Shared/BookCard";
 import BrowseFilters from "@/components/BrowsePageCompo/BrowseFilters";

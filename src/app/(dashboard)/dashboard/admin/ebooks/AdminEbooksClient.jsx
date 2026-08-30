@@ -1,4 +1,3 @@
-// components/dashboard/admin/ebooks/admin-ebooks-client.jsx
 'use client';
 
 import { useState } from 'react';

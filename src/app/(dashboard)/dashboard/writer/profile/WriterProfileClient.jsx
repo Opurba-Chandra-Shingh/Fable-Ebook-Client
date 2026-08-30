@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/writer-profile-client.jsx
 'use client';
 
 import ChangePasswordSection from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/ChangePasswordSection';

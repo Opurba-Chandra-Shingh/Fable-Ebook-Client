@@ -1,7 +1,6 @@
-// components/dashboard/writer/sales/sales-toolbar.jsx
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 
 const fieldClass =
@@ -10,8 +9,6 @@ const fieldClass =
 export default function SalesToolbar({ filters, onChange, ebookOptions }) {
   const [searchValue, setSearchValue] = useState(filters.search);
   const debounceRef = useRef(null);
-
-//   useEffect(() => setSearchValue(filters.search), [filters.search]);
 
   function handleSearchChange(e) {
     const next = e.target.value;

@@ -1,4 +1,3 @@
-// app/dashboard/reader/layout.jsx
 import { redirect } from 'next/navigation';
 import UserSidebar from '@/components/UserDashboardRelatedCompo.jsx/UserSidebarContent';
 import DashboardHeader from '@/components/WriterDashboardRelatedCompo/DashboardHeader';

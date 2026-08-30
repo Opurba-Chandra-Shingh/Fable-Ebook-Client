@@ -1,4 +1,3 @@
-// components/dashboard/writer/quick-actions.jsx
 import Link from 'next/link';
 import { PlusCircle, Library, LineChart } from 'lucide-react';
 

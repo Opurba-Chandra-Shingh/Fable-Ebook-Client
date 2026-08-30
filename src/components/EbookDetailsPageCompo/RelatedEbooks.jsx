@@ -1,11 +1,9 @@
-// components/ebook/related-ebooks.jsx
 'use client';
 
 import { motion } from 'framer-motion';
 import BookCard from '../Shared/BookCard';
 
 export default function RelatedEbooks({relatedBooks}) {
-    // console.log("related book from compo: ", relatedBooks);
   return (
     <section className="mt-16">
       <h2 className="font-serif text-2xl font-medium text-[var(--text-primary)]">

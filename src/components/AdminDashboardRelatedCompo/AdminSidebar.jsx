@@ -1,4 +1,3 @@
-// components/dashboard/admin/admin-sidebar.jsx
 'use client';
 
 import { useState } from 'react';

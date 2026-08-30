@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/new/cover-preview-panel.jsx
 export default function CoverPreviewPanel({ coverImage, title, genre, price }) {
   return (
     <div className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-5">

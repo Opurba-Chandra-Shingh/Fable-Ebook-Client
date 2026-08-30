@@ -1,5 +1,3 @@
-// app/register/page.jsx
-
 import { Suspense } from 'react';
 import { BookOpen } from 'lucide-react';
 import Link from 'next/link';

@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/status-badge.jsx
 export default function StatusBadge({ status }) {
   const isPublished = status === 'published';
   return (

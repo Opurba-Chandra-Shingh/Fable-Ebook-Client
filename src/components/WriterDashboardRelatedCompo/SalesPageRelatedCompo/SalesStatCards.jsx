@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales/sales-stat-cards.jsx
 import { ShoppingBag, Wallet, TrendingUp, Trophy } from 'lucide-react';
 
 export default function SalesStatCards({ sales }) {

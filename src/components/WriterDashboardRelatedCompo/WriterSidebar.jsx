@@ -1,4 +1,3 @@
-// components/dashboard/writer-sidebar.jsx
 'use client';
 
 import { useState } from 'react';

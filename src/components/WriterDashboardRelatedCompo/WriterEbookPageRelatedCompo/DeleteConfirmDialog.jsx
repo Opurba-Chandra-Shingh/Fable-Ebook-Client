@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/delete-confirm-dialog.jsx
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';

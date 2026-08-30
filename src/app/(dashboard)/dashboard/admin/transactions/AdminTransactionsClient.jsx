@@ -1,4 +1,3 @@
-// components/dashboard/admin/transactions/admin-transactions-client.jsx
 'use client';
 
 import { useMemo, useState } from 'react';

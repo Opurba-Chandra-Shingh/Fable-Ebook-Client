@@ -1,5 +1,3 @@
-// app/ebooks/[id]/page.jsx
-
 import { getBookByID, getRelatedBooksByGenre } from "@/api/books";
 import EbookDetailsView from "./EbookDetailsView";
 import { getWriterById } from "@/api/writer";

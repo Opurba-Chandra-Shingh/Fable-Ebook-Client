@@ -1,7 +1,4 @@
-// app/dashboard/writer/layout.jsx
 import { redirect } from 'next/navigation';
-
-
 
 import WriterSidebar from '@/components/WriterDashboardRelatedCompo/WriterSidebar';
 import DashboardHeader from '@/components/WriterDashboardRelatedCompo/DashboardHeader';
@@ -9,7 +6,6 @@ import { getUserSession } from '@/session/session';
 
 export default async function WriterDashboardLayout({ children }) {
   const user = await getUserSession();
-  // console.log("user from writer layout: ", user);
 
   if (!user) {
     redirect('/login?redirect=/dashboard/writer');

@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/my-ebooks-client.jsx
 'use client';
 
 import { useMemo, useState } from 'react';

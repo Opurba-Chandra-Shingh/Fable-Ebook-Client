@@ -1,4 +1,3 @@
-// components/dashboard/reader/profile/reader-profile-client.jsx
 'use client';
 
 import { useState } from 'react';

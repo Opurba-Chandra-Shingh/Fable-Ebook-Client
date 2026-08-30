@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales/sales-status-badge.jsx
 const STATUS_STYLES = {
   completed: 'bg-[var(--accent)]/10 text-[var(--accent)]',
   pending: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',

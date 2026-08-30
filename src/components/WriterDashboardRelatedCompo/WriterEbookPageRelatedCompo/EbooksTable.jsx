@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/ebooks-table.jsx
 import StatusBadge from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/StatusBadge';
 import EbookRowActions from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EbookRowActions';
 

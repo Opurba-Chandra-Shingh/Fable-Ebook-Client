@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales/writer-sales-client.jsx
 'use client';
 
 import RevenueChart from '@/components/WriterDashboardRelatedCompo/SalesPageRelatedCompo/RevenueChart';
@@ -8,11 +7,6 @@ import SalesStatCards from '@/components/WriterDashboardRelatedCompo/SalesPageRe
 import SalesTable from '@/components/WriterDashboardRelatedCompo/SalesPageRelatedCompo/SalesTable';
 import SalesToolbar from '@/components/WriterDashboardRelatedCompo/SalesPageRelatedCompo/SalesToolbar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
-
-
-// lib/dummy-writer-sales.js
-// Dummy sales data for /dashboard/writer/sales — swap for a real API call later.
 
 const dummySales = [
   { id: 'txn_a1b2c3d4', ebookId: 'ebook_1', ebookTitle: 'Glasshouse Kingdom', buyerName: 'Hannah Beaumont', buyerEmail: 'hannah.b@example.com', amount: 8.75, date: '2026-08-27', status: 'completed' },
@@ -50,18 +44,6 @@ const DEFAULT_FILTERS = { search: '', ebook: '', status: '', startDate: '', endD
 export default function WriterSalesClient() {
   const [status, setStatus] = useState('ready');
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
-
-//   // Simulates fetching — swap for a real API call later.
-//   const load = useCallback(() => {
-//     setStatus('loading');
-//     const timeout = setTimeout(() => setStatus('ready'), 500);
-//     return () => clearTimeout(timeout);
-//   }, []);
-
-//   useEffect(() => {
-//     const cleanup = load();
-//     return cleanup;
-//   }, [load]);
 
   function handleFilterChange(next) {
     setFilters((prev) => ({ ...prev, ...next }));

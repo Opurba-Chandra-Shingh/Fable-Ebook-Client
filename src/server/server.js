@@ -4,10 +4,7 @@ import { getUserSession } from "@/session/session";
 
 const serverUrl = process.env.SERVER_SIDE_URL;
 
-// Every call is stamped with the currently logged-in user's verified id, so
-// the Express backend never has to trust an id coming from the browser.
-// This request always originates on our own Next.js server, so the browser
-// can never forge these headers.
+// stamps every request with the verified user id — the browser never sees this call, so it can't be forged
 async function authHeaders() {
     const user = await getUserSession();
 

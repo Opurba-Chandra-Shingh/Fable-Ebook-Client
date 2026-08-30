@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/new/cover-uploader.jsx
 'use client';
 
 import { useState, useRef } from 'react';

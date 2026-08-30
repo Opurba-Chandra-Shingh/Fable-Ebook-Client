@@ -1,4 +1,3 @@
-// components/dashboard/dashboard-header.jsx
 'use client';
 
 import { useState } from 'react';

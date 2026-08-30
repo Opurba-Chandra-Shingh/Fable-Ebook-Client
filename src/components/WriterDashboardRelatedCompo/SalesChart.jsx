@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales-chart.jsx
 'use client';
 
 import {

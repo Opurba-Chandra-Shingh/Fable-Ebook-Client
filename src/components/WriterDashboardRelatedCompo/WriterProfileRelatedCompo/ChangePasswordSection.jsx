@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/change-password-section.jsx
 'use client';
 
 import { useState } from 'react';

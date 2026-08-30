@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/summary-stats.jsx
 export default function SummaryStats({ summary }) {
   const items = [
     { label: 'Total Ebooks', value: summary.total },

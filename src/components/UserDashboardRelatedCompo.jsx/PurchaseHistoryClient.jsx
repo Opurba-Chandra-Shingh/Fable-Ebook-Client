@@ -1,4 +1,3 @@
-// components/dashboard/reader/purchase-history-client.jsx
 'use client';
 
 import { useMemo, useState } from 'react';

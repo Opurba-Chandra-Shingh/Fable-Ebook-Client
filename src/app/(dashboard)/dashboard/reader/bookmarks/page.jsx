@@ -1,5 +1,3 @@
-// app/dashboard/reader/bookmarks/page.jsx
-
 import BookmarksClient from "@/components/Shared/BookmarksClient";
 import { getAllBookmarkedBooks } from "@/api/bookmaks";
 

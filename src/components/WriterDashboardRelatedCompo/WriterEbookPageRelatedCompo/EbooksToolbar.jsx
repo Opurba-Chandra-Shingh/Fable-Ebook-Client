@@ -1,7 +1,5 @@
-// components/dashboard/writer/ebooks/ebooks-toolbar.jsx
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 
 const STATUS_TABS = [
@@ -14,7 +12,6 @@ export default function EbooksToolbar({ filters, onChange }) {
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      {/* Status tabs */}
       <div className="flex gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)] p-1">
         {STATUS_TABS.map((tab) => {
           const isActive = filters.status === tab.value;
@@ -35,7 +32,6 @@ export default function EbooksToolbar({ filters, onChange }) {
       </div>
 
       <div className="flex flex-1 items-center gap-3 sm:justify-end">
-        {/* Search */}
         <div className="relative w-full max-w-xs">
           <Search
             size={15}
@@ -43,14 +39,12 @@ export default function EbooksToolbar({ filters, onChange }) {
           />
           <input
             type="text"
-            // value={searchValue}
             onChange={(e)=>onChange({search:e.target.value})}
             placeholder="Search by title..."
             className="w-full rounded-input border border-[var(--border)] bg-[var(--surface)] py-2 pl-9 pr-8 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
           />
         </div>
 
-        {/* Sort */}
         <select
           value={filters.sort}
           onChange={(e) => onChange({ sort: e.target.value })}

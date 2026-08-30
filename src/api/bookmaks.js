@@ -2,12 +2,7 @@
 
 import { serverFetch } from "@/server/server"
 
-// Always returns the currently logged-in user's own bookmarks — the backend
-// derives the user from the verified session, so no id needs to be passed.
+// always the current user's own bookmarks — no id to pass, the backend knows from the session
 export const getAllBookmarkedBooks = async()=>{
-    return await serverFetch('/api/bookmarks');
-}
-
-export const getAllBookmarkedBooksWithQuery = async()=>{
     return await serverFetch('/api/bookmarks');
 }

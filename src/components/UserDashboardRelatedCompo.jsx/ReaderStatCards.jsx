@@ -1,4 +1,3 @@
-// components/dashboard/reader/reader-stat-cards.jsx
 import { Library, Bookmark, Wallet, BookCheck } from 'lucide-react';
 
 export default function ReaderStatCards({ stats }) {

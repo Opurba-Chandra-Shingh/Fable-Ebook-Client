@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales/sales-states.jsx
 import { ReceiptText, RefreshCw } from 'lucide-react';
 
 export function SalesEmptyState() {

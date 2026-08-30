@@ -1,4 +1,3 @@
-// components/dashboard/writer/sales/transaction-id.jsx
 'use client';
 
 import { useState } from 'react';

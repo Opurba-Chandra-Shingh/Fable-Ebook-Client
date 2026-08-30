@@ -1,5 +1,3 @@
-// app/dashboard/writer/sales/page.jsx
-
 import WriterSalesClient from "./WriterSalesClient";
 
 

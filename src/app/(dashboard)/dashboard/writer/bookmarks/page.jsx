@@ -1,5 +1,3 @@
-// app/dashboard/writer/bookmarks/page.jsx
-
 import WriterBookmarksClient from "./WriterBookmarksClient";
 import { getAllBookmarkedBooks } from "@/api/bookmaks";
 

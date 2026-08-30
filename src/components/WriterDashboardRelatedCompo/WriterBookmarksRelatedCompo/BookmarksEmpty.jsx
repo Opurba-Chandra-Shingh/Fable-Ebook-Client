@@ -1,4 +1,3 @@
-// components/dashboard/writer/bookmarks/bookmarks-empty.jsx
 import Link from 'next/link';
 import { Bookmark } from 'lucide-react';
 

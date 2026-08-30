@@ -1,4 +1,3 @@
-// components/dashboard/writer/dashboard-error.jsx
 import { RefreshCw } from 'lucide-react';
 
 export default function DashboardError({ onRetry }) {

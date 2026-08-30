@@ -1,4 +1,3 @@
-// components/dashboard/writer/stat-cards.jsx
 import { Library, BookCheck, ShoppingBag, Wallet } from 'lucide-react';
 
 export default function StatCards({ stats }) {

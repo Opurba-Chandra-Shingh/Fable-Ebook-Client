@@ -1,5 +1,3 @@
-// components/dashboard/writer/ebooks/ebooks-cards.jsx
-
 import EbookRowActions from './EbookRowActions';
 import StatusBadge from './StatusBadge';
 

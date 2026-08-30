@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/ebook-row-actions.jsx
 'use client';
 
 import { useState, useRef, useEffect } from 'react';

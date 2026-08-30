@@ -1,4 +1,3 @@
-// components/dashboard/writer/ebooks/new/add-ebook-form.jsx
 'use client';
 
 import { useState } from 'react';

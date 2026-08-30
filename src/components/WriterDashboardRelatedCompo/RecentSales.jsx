@@ -1,4 +1,3 @@
-// components/dashboard/writer/recent-sales.jsx
 export default function RecentSales({ sales }) {
   return (
     <div className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-5">

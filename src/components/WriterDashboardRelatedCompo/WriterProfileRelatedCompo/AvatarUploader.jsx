@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/avatar-uploader.jsx
 'use client';
 
 import { useState, useRef } from 'react';

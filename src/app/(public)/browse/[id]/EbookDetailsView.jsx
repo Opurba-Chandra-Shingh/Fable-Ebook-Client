@@ -1,4 +1,3 @@
-// components/ebook/ebook-details-view.jsx
 'use client';
 
 import { useState } from 'react';

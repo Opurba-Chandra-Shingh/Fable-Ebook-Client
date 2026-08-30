@@ -1,5 +1,3 @@
-
-// components/dashboard/writer/sales/revenue-chart.jsx
 'use client';
 
 import { useMemo, useState } from 'react';

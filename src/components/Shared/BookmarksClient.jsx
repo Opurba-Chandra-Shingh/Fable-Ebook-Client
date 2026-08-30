@@ -1,4 +1,3 @@
-// components/shared/bookmarks-client.jsx
 'use client';
 
 import { useState } from 'react';

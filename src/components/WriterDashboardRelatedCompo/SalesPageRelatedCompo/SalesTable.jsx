@@ -1,5 +1,3 @@
-// components/dashboard/writer/sales/sales-table.jsx
-
 import SalesStatusBadge from "./SalesStatusBadge";
 import TransactionId from "./TransactionId";
 

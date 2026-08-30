@@ -1,5 +1,3 @@
-// app/dashboard/writer/ebooks/[id]/edit/page.jsx
-
 import { notFound, redirect } from "next/navigation";
 import { getBookByID } from "@/api/books";
 import { getUserSession } from "@/session/session";

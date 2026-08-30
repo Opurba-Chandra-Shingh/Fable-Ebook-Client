@@ -1,4 +1,3 @@
-// components/dashboard/writer/writer-dashboard-client.jsx
 'use client';
 
 import QuickActions from "@/components/WriterDashboardRelatedCompo/QuickActions";

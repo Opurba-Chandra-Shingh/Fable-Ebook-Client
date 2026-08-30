@@ -1,4 +1,3 @@
-// components/dashboard/writer/profile/profile-skeleton.jsx
 export default function ProfileSkeleton() {
   return (
     <div className="space-y-6">

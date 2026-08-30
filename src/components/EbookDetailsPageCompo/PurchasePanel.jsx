@@ -1,4 +1,3 @@
-// components/ebook/purchase-panel.jsx
 'use client';
 
 import { useState } from 'react';
