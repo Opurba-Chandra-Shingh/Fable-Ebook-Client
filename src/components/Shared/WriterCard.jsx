@@ -1,20 +1,20 @@
 import Link from 'next/link';
-import { BookOpen, Users } from 'lucide-react';
+import { BookOpen, ShoppingBag } from 'lucide-react';
 
 export default function WriterCard({ writer }) {
-  const { slug, avatar, name, bio, booksCount, followers } = writer;
+  const { _id, image, name, bio, booksCount, salesCount } = writer;
 
   return (
     <Link
-      href={`/writers/${slug}`}
+      href={`/writers/${_id}`}
       className="group block rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-subtle"
     >
       <div className="flex items-center gap-4">
         <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full border border-[var(--border)] bg-[var(--background-secondary)]">
-          {avatar ? (
+          {image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={avatar}
+              src={image}
               alt={name}
               className="h-full w-full object-cover"
             />
@@ -30,7 +30,7 @@ export default function WriterCard({ writer }) {
             {name}
           </h3>
           <p className="mt-0.5 text-sm text-[var(--text-secondary)] line-clamp-1">
-            {bio}
+            {bio || 'Fable writer'}
           </p>
         </div>
       </div>
@@ -45,11 +45,11 @@ export default function WriterCard({ writer }) {
         </div>
 
         <div className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
-          <Users size={15} className="text-[var(--accent)]" />
+          <ShoppingBag size={15} className="text-[var(--accent)]" />
           <span className="font-medium text-[var(--text-primary)]">
-            {followers}
+            {salesCount}
           </span>
-          followers
+          sales
         </div>
       </div>
     </Link>

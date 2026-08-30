@@ -5,3 +5,7 @@ import { serverMutation } from "@/server/server"
 export const createCheckoutSession = async (bookId) => {
     return await serverMutation('/api/purchases/create-checkout-session', { bookId }, 'POST');
 }
+
+export const confirmPurchase = async (sessionId) => {
+    return await serverMutation('/api/purchases/confirm', { sessionId }, 'POST');
+}

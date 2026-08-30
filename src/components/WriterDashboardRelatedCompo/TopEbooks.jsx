@@ -39,7 +39,7 @@ export default function TopEbooks({ books }) {
               </div>
 
               <Link
-                href={`/ebooks/${book.id}`}
+                href={`/browse/${book.id}`}
                 className="shrink-0 rounded-btn border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--background-secondary)]"
               >
                 View

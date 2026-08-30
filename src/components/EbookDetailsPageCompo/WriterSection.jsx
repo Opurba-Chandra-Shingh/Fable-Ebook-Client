@@ -14,7 +14,7 @@ export default function WriterSection({ writer }) {
     <div className="mt-10 rounded-card border border-[var(--border)] bg-[var(--surface-alt)] p-5">
       <div className="flex items-center gap-4">
         <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[var(--border)] bg-[var(--background-secondary)]">
-          {writer.avatar ? (
+          {writer.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={writer.image}

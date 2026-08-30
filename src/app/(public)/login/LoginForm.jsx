@@ -25,10 +25,18 @@ const ROLE_REDIRECTS = {
   admin: '/dashboard/admin',
 };
 
+const DEMO_ACCOUNTS = [
+  { role: 'Reader', email: 'reader@fable.com', password: 'Reader@123' },
+  { role: 'Writer', email: 'writer@fable.com', password: 'Writer@123' },
+  { role: 'Admin', email: 'admin@fable.com', password: 'Admin@123' },
+];
+
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,15 +47,11 @@ export default function LoginForm() {
     e.preventDefault();
     setFormError('');
 
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    const email = String(data.email || '').trim();
-    const password = String(data.password || '');
-
     setIsSubmitting(true);
 
     try {
       const { data, error } = await authClient.signIn.email({
-        email,
+        email: email.trim(),
         password,
         rememberMe: true,
       });
@@ -95,6 +99,25 @@ export default function LoginForm() {
         Continue your reading journey with Fable.
       </p>
 
+      <div className="mt-5 rounded-card border border-[var(--border)] bg-[var(--surface-alt)] p-3.5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+          Demo Accounts
+        </p>
+        <div className="mt-2.5 space-y-1">
+          {DEMO_ACCOUNTS.map((account) => (
+            <div
+              key={account.role}
+              className="flex items-center justify-between px-0.5 text-xs"
+            >
+              <span className="font-medium text-[var(--text-primary)]">{account.role}</span>
+              <span className="font-mono text-[var(--text-secondary)]">
+                {account.email} · {account.password}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {formError && (
         <div
           role="alert"
@@ -116,6 +139,8 @@ export default function LoginForm() {
           isRequired
           autoComplete="email"
           isDisabled={isBusy}
+          value={email}
+          onChange={setEmail}
           className="flex flex-col gap-1.5"
         >
           <Label className="text-sm font-medium text-[var(--text-primary)]">
@@ -135,6 +160,8 @@ export default function LoginForm() {
           isRequired
           autoComplete="current-password"
           isDisabled={isBusy}
+          value={password}
+          onChange={setPassword}
           className="flex flex-col gap-1.5"
         >
           <div className="flex items-center justify-between">

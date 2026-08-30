@@ -17,7 +17,7 @@ export default function DashboardHeader({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--background)] px-6 py-5 md:px-10">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--border)] bg-[var(--background)]/95 px-6 py-5 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/80 md:px-10">
       <div className="ml-10 lg:ml-0">
         <h1 className="font-serif text-2xl font-medium text-[var(--text-primary)] md:text-3xl">
           Good to see you, {user?.name?.split(' ')[0] || 'there'}.

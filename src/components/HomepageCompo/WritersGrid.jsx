@@ -1,20 +1,15 @@
 import Link from 'next/link';
 import WriterCard from '../Shared/WriterCard';
 import ViewAll from '../Shared/Buttons/ViewAll';
+import { getAllWriters } from '@/api/writer';
 
 
-const writers = [
-  {
-    slug: 'ingrid-solheim',
-    avatar: '/images/writers/ingrid.jpg',
-    name: 'Ingrid Solheim',
-    bio: 'Fantasy & Science Fiction author',
-    booksCount: 4,
-    followers: '2.1k',
-  },
-];
+export default async function WritersGrid() {
+  const allWriters = await getAllWriters();
+  const writers = allWriters.slice(0, 3);
 
-export default function WritersGrid() {
+  if (writers.length === 0) return null;
+
   return (
     <section className="mx-auto max-w-content px-6 py-16 md:px-10 md:py-24">
       {/* Section Header */}
@@ -39,7 +34,7 @@ export default function WritersGrid() {
       {/* Writers Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {writers.map((writer) => (
-          <WriterCard key={writer.slug} writer={writer} />
+          <WriterCard key={writer._id} writer={writer} />
         ))}
       </div>
     </section>

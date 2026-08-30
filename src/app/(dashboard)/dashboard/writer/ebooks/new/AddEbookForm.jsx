@@ -1,11 +1,10 @@
 // components/dashboard/writer/ebooks/new/add-ebook-form.jsx
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-// import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-// import { createEbook } from '@/lib/api';
 import { showToast } from '@/lib/toast';
 import CoverUploader from '@/components/WriterDashboardRelatedCompo/AddEbookPageRelatedCompo/CoverUploader';
 import CoverPreviewPanel from '@/components/WriterDashboardRelatedCompo/AddEbookPageRelatedCompo/CoverPreviewPanel';
@@ -29,8 +28,13 @@ const labelClass = 'mb-1.5 block text-sm font-medium text-[var(--text-primary)]'
 
 export default function AddEbookForm({writer}) {
 
-  // console.log(writer);
+  const router = useRouter();
 
+  const [title, setTitle] = useState('');
+  const [genre, setGenre] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [bookContent, setBookContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState('');
@@ -41,11 +45,12 @@ export default function AddEbookForm({writer}) {
   const hndlSubmit = async(e) => {
     e.preventDefault();
 
-    const formdata = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formdata.entries());
-
     const newbook = {
-      ...data,
+      title,
+      genre,
+      price: Number(price),
+      description,
+      bookContent,
       coverImage,
       writerId:writer.id,
       uploadedAt:new Date(),
@@ -54,16 +59,14 @@ export default function AddEbookForm({writer}) {
 
     }
 
-    // console.log("New book from addBook: ", newbook);
-
     setIsSubmitting(true);
 
     try{
       const response = await postBook(newbook);
-      console.log("Post Response: ", response);
 
       if(response.insertedId){
-        alert("Post Successfull");
+        showToast.success('Ebook created successfully.');
+        router.push('/dashboard/writer/ebooks');
       }
     }
     catch{
@@ -117,6 +120,8 @@ export default function AddEbookForm({writer}) {
                 <input
                   type="text"
                   name="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="The name of your story"
                   className={`${fieldClass} ${errors.title ? 'border-red-400' : 'border-[var(--border)]'}`}
                 />
@@ -128,6 +133,8 @@ export default function AddEbookForm({writer}) {
                   <label className={labelClass}>Genre</label>
                   <select
                     name="genre"
+                    value={genre}
+                    onChange={(e) => setGenre(e.target.value)}
                     className={`${fieldClass} ${errors.genre ? 'border-red-400' : 'border-[var(--border)]'}`}
                   >
                     <option value="">Select a genre</option>
@@ -150,6 +157,8 @@ export default function AddEbookForm({writer}) {
                       max={MAX_PRICE}
                       step="0.01"
                       name="price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
                       placeholder="9.99"
                       className={`${fieldClass} pl-7 ${errors.price ? 'border-red-400' : 'border-[var(--border)]'}`}
                     />
@@ -164,6 +173,8 @@ export default function AddEbookForm({writer}) {
                 </div>
                 <textarea
                   name='description'
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Tell readers what this story is about..."
                   rows={5}
                   className={`${fieldClass} resize-none leading-relaxed ${errors.description ? 'border-red-400' : 'border-[var(--border)]'}`}
@@ -186,11 +197,12 @@ export default function AddEbookForm({writer}) {
 
             <textarea
               name='bookContent'
+              value={bookContent}
+              onChange={(e) => setBookContent(e.target.value)}
               placeholder="Write your story here..."
               rows={16}
               className={`mt-4 w-full rounded-input border bg-[var(--surface-alt)] px-4 py-4 font-serif text-[15px] leading-8 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40 ${errors.content ? 'border-red-400' : 'border-[var(--border)]'
                 }`}
-              placeholder-loading="true"
             />
             {errors.content && <p className="mt-1.5 text-xs text-red-500">{errors.content}</p>}
             <p className="mt-2 text-xs text-[var(--text-secondary)]">
@@ -211,9 +223,9 @@ export default function AddEbookForm({writer}) {
 
           <CoverPreviewPanel
             coverImage={coverImage}
-            title={''}
-            genre={''}
-            price={''}
+            title={title}
+            genre={genre}
+            price={price}
           />
 
           <button

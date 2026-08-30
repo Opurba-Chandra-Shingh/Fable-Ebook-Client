@@ -81,7 +81,7 @@ export default function UserSidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)] lg:block">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 overflow-y-auto border-r border-[var(--border)] bg-[var(--surface)] lg:block">
         <SidebarContent router={router} pathname={pathname} />
       </aside>
 

@@ -36,6 +36,7 @@ export default function Navbar() {
     const NAV_LINKS = [
         { label: 'Home', href: '/' },
         { label: 'Browse Ebooks', href: '/browse' },
+        { label: 'Writers', href: '/writers' },
         { label: 'About', href: '/about' },
     ];
 
