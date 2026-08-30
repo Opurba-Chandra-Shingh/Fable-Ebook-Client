@@ -11,17 +11,6 @@ const STATUS_TABS = [
 ];
 
 export default function EbooksToolbar({ filters, onChange }) {
-  const [searchValue, setSearchValue] = useState(filters.search);
-  const debounceRef = useRef(null);
-
-  // useEffect(() => setSearchValue(filters.search), [filters.search]);
-
-  function handleSearchChange(e) {
-    const next = e.target.value;
-    setSearchValue(next);
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => onChange({ search: next }), 350);
-  }
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -33,12 +22,11 @@ export default function EbooksToolbar({ filters, onChange }) {
             <button
               key={tab.value}
               type="button"
-              onClick={() => onChange({ status: tab.value })}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                isActive
+              onClick={() => onChange({status:tab.value})}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${isActive
                   ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -55,21 +43,11 @@ export default function EbooksToolbar({ filters, onChange }) {
           />
           <input
             type="text"
-            value={searchValue}
-            onChange={handleSearchChange}
+            // value={searchValue}
+            onChange={(e)=>onChange({search:e.target.value})}
             placeholder="Search by title..."
             className="w-full rounded-input border border-[var(--border)] bg-[var(--surface)] py-2 pl-9 pr-8 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
           />
-          {searchValue && (
-            <button
-              type="button"
-              onClick={() => { setSearchValue(''); onChange({ search: '' }); }}
-              aria-label="Clear search"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"
-            >
-              <X size={14} />
-            </button>
-          )}
         </div>
 
         {/* Sort */}

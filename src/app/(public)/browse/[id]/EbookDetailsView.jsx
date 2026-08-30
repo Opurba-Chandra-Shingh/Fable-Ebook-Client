@@ -8,11 +8,16 @@ import PurchasePanel from '@/components/EbookDetailsPageCompo/PurchasePanel';
 import BookmarkButton from '@/components/EbookDetailsPageCompo/BookmarkButton';
 import WriterSection from '@/components/EbookDetailsPageCompo/WriterSection';
 import RelatedEbooks from '@/components/EbookDetailsPageCompo/RelatedEbooks';
+import { useRouter } from 'next/navigation';
 
 
-export default function EbookDetailsView({ ebook, writer, relatedBooks}) {
+export default function EbookDetailsView({ ebook, writer, relatedBooks, currentUser, bookmarkedBooks}) {
   const [coverFailed, setCoverFailed] = useState(false);
   const isAvailable = ebook.status !== 'unavailable' && ebook.status !== 'sold';
+
+  const router = useRouter();
+
+
 
 
   return (
@@ -79,7 +84,7 @@ export default function EbookDetailsView({ ebook, writer, relatedBooks}) {
             >
               <dt className="sr-only">Price</dt>
               <dd className="text-lg font-semibold text-[var(--text-primary)]">
-                ${ebook.price.toFixed(2)}
+                ${ebook.price}
               </dd>
             </motion.div>
             <motion.div variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}>
@@ -104,8 +109,9 @@ export default function EbookDetailsView({ ebook, writer, relatedBooks}) {
               <PurchasePanel ebook={ebook} />
             </div>
             <BookmarkButton
-              ebookId={ebook.id}
-              initialBookmarked={ebook.isBookmarkedByCurrentUser}
+              ebook={ebook}
+              currentUser={currentUser}
+              bookmarkedBooks={bookmarkedBooks}
             />
           </div>
 

@@ -121,7 +121,7 @@ export default function PurchasePanel({ ebook }) {
       ) : (
         <>
           <ShoppingBag size={16} />
-          Buy Now — ${ebook.price.toFixed(2)}
+          Buy Now — ${ebook.price}
         </>
       )}
     </button>

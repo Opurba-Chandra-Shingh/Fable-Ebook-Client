@@ -9,6 +9,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import { showToast } from '@/lib/toast';
 import CoverUploader from '@/components/WriterDashboardRelatedCompo/AddEbookPageRelatedCompo/CoverUploader';
 import CoverPreviewPanel from '@/components/WriterDashboardRelatedCompo/AddEbookPageRelatedCompo/CoverPreviewPanel';
+import { postBook } from '@/action/books';
 
 
 const GENRES = [
@@ -17,114 +18,63 @@ const GENRES = [
 ];
 
 const MAX_PRICE = 500;
-// const DRAFT_KEY = 'fable_new_ebook_draft';
+
 
 const fieldClass =
   'w-full rounded-input border bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40';
 
 const labelClass = 'mb-1.5 block text-sm font-medium text-[var(--text-primary)]';
 
-// function loadDraft() {
-//   if (typeof window === 'undefined') return null;
-//   try {
-//     const raw = localStorage.getItem(DRAFT_KEY);
-//     return raw ? JSON.parse(raw) : null;
-//   } catch {
-//     return null;
-//   }
-// }
 
-export default function AddEbookForm() {
-  // const router = useRouter();
-  // const draft = useRef(loadDraft());
 
-  const [form, setForm] = useState({});
+export default function AddEbookForm({writer}) {
 
-//   const [form, setForm] = useState(() => ({
-//     title: draft.current?.title || '',
-//     genre: draft.current?.genre || '',
-//     price: draft.current?.price || '',
-//     description: draft.current?.description || '',
-//     content: draft.current?.content || '',
-//     coverImage: draft.current?.coverImage || '',
-//   }));
+  // console.log(writer);
+
+  const [coverImage, setCoverImage] = useState('');
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState('');
-  // const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // autosave draft (excludes nothing sensitive — just form fields)
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     try {
-  //       localStorage.setItem(DRAFT_KEY, JSON.stringify(form));
-  //     } catch {
-  //       // storage unavailable — ignore, autosave is a convenience only
-  //     }
-  //   }, 500);
-  //   return () => clearTimeout(timeout);
-  // }, [form]);
 
-  // const update = useCallback((field, value) => {
-  //   setForm((prev) => ({ ...prev, [field]: value }));
-  //   setErrors((prev) => ({ ...prev, [field]: undefined }));
-  // }, []);
 
-  // function validate() {
-  //   const next = {};
-  //   if (!form.title.trim()) next.title = 'Title is required.';
-  //   if (!form.genre) next.genre = 'Genre is required.';
+  const hndlSubmit = async(e) => {
+    e.preventDefault();
 
-  //   const priceNum = Number(form.price);
-  //   if (!form.price) {
-  //     next.price = 'Price is required.';
-  //   } else if (isNaN(priceNum) || priceNum <= 0) {
-  //     next.price = 'Price must be greater than $0.';
-  //   } else if (priceNum > MAX_PRICE) {
-  //     next.price = `Price must be $${MAX_PRICE} or less.`;
-  //   }
+    const formdata = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formdata.entries());
 
-  //   if (!form.description.trim()) next.description = 'Description is required.';
-  //   if (!form.content.trim()) next.content = 'Ebook content is required.';
-  //   if (!form.coverImage) next.coverImage = 'A cover image is required.';
+    const newbook = {
+      ...data,
+      coverImage,
+      writerId:writer.id,
+      uploadedAt:new Date(),
+      publishingStatus:"unpublished",
+      status: "Available"
 
-  //   setErrors(next);
-  //   return Object.keys(next).length === 0;
-  // }
+    }
 
-  // async function handleSubmit(e) {
-  //   e.preventDefault();
-  //   setFormError('');
+    // console.log("New book from addBook: ", newbook);
 
-  //   if (isSubmitting) return;
-  //   if (!validate()) return;
+    setIsSubmitting(true);
 
-  //   setIsSubmitting(true);
-  //   try {
-  //     await createEbook({
-  //       title: form.title.trim(),
-  //       genre: form.genre,
-  //       price: Number(form.price),
-  //       description: form.description.trim(),
-  //       content: form.content,
-  //       coverImage: form.coverImage,
-  //       status: 'unpublished',
-  //     });
+    try{
+      const response = await postBook(newbook);
+      console.log("Post Response: ", response);
 
-  //     try {
-  //       localStorage.removeItem(DRAFT_KEY);
-  //     } catch {
-  //       // ignore
-  //     }
+      if(response.insertedId){
+        alert("Post Successfull");
+      }
+    }
+    catch{
+      setFormError('Unable to create ebook. Please try again.');
+      showToast.error('Unable to create ebook.');
+    }
+    finally{
+      setIsSubmitting(false);
+    }
 
-  //     showToast.success('Ebook created successfully.');
-  //     router.push('/dashboard/writer/ebooks');
-  //   } catch (err) {
-  //     setFormError('Unable to create ebook. Please check your information and try again.');
-  //     showToast.error('Unable to create ebook.');
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // }
+  }
 
   return (
     <div>
@@ -152,7 +102,7 @@ export default function AddEbookForm() {
         </div>
       )}
 
-      <form  noValidate className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[2.2fr_1fr]">
+      <form onSubmit={hndlSubmit} noValidate className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[2.2fr_1fr]">
         {/* Left: main form */}
         <div className="space-y-8">
           {/* Basic information */}
@@ -166,8 +116,7 @@ export default function AddEbookForm() {
                 <label className={labelClass}>Title</label>
                 <input
                   type="text"
-                  value={form.title}
-                  onChange={(e) => update('title', e.target.value)}
+                  name="title"
                   placeholder="The name of your story"
                   className={`${fieldClass} ${errors.title ? 'border-red-400' : 'border-[var(--border)]'}`}
                 />
@@ -178,8 +127,7 @@ export default function AddEbookForm() {
                 <div>
                   <label className={labelClass}>Genre</label>
                   <select
-                    value={form.genre}
-                    onChange={(e) => update('genre', e.target.value)}
+                    name="genre"
                     className={`${fieldClass} ${errors.genre ? 'border-red-400' : 'border-[var(--border)]'}`}
                   >
                     <option value="">Select a genre</option>
@@ -201,8 +149,7 @@ export default function AddEbookForm() {
                       min="0.01"
                       max={MAX_PRICE}
                       step="0.01"
-                      value={form.price}
-                      onChange={(e) => update('price', e.target.value)}
+                      name="price"
                       placeholder="9.99"
                       className={`${fieldClass} pl-7 ${errors.price ? 'border-red-400' : 'border-[var(--border)]'}`}
                     />
@@ -214,13 +161,9 @@ export default function AddEbookForm() {
               <div>
                 <div className="flex items-center justify-between">
                   <label className={labelClass}>Description</label>
-                  {/* <span className="text-xs text-[var(--text-secondary)]">
-                    {form.description.length}/500
-                  </span> */}
                 </div>
                 <textarea
-                  value={form.description}
-                  onChange={(e) => update('description', e.target.value.slice(0, 500))}
+                  name='description'
                   placeholder="Tell readers what this story is about..."
                   rows={5}
                   className={`${fieldClass} resize-none leading-relaxed ${errors.description ? 'border-red-400' : 'border-[var(--border)]'}`}
@@ -242,13 +185,11 @@ export default function AddEbookForm() {
             </p>
 
             <textarea
-              value={form.content}
-              onChange={(e) => update('content', e.target.value)}
+              name='bookContent'
               placeholder="Write your story here..."
               rows={16}
-              className={`mt-4 w-full rounded-input border bg-[var(--surface-alt)] px-4 py-4 font-serif text-[15px] leading-8 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40 ${
-                errors.content ? 'border-red-400' : 'border-[var(--border)]'
-              }`}
+              className={`mt-4 w-full rounded-input border bg-[var(--surface-alt)] px-4 py-4 font-serif text-[15px] leading-8 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40 ${errors.content ? 'border-red-400' : 'border-[var(--border)]'
+                }`}
               placeholder-loading="true"
             />
             {errors.content && <p className="mt-1.5 text-xs text-red-500">{errors.content}</p>}
@@ -262,32 +203,32 @@ export default function AddEbookForm() {
         <div className="space-y-6">
           <div className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-6">
             <CoverUploader
-              value={form.coverImage}
-              onChange={(url) => update('coverImage', url)}
+              value={coverImage}
+              onChange={(url) => setCoverImage(url)}
               error={errors.coverImage}
             />
           </div>
 
           <CoverPreviewPanel
-            coverImage={form.coverImage}
-            title={form.title}
-            genre={form.genre}
-            price={form.price}
+            coverImage={coverImage}
+            title={''}
+            genre={''}
+            price={''}
           />
 
           <button
             type="submit"
-            // disabled={isSubmitting}
+            disabled={isSubmitting}
             className="flex w-full items-center justify-center gap-2 rounded-btn bg-[var(--button-primary-bg)] px-5 py-3.5 text-sm font-semibold text-[var(--button-primary-text)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {/* {isSubmitting ? (
+            {isSubmitting ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
                 Creating Ebook...
               </>
-            ) : ( */}
+            ) : (
               'Create Ebook'
-            {/* )} */}
+            )}
           </button>
         </div>
       </form>

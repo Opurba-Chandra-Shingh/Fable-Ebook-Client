@@ -8,7 +8,7 @@ export default function EbooksCards({ ebooks, onTogglePublish, onDelete, updatin
   return (
     <div className="space-y-3 md:hidden">
       {ebooks.map((ebook) => (
-        <div key={ebook.id} className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-4">
+        <div key={ebook._id} className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-4">
           <div className="flex gap-3">
             <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md bg-[var(--background-secondary)]">
               {ebook.coverImage ? (
@@ -33,7 +33,7 @@ export default function EbooksCards({ ebooks, onTogglePublish, onDelete, updatin
                 <StatusBadge status={ebook.status} />
               </div>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                ${ebook.price.toFixed(2)} · {ebook.sales} sales
+                ${ebook.price} · {ebook.sales} sales
               </p>
             </div>
           </div>

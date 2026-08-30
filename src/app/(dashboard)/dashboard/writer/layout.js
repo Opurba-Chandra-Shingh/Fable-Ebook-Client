@@ -9,7 +9,7 @@ import { getUserSession } from '@/session/session';
 
 export default async function WriterDashboardLayout({ children }) {
   const user = await getUserSession();
-  console.log("user from writer layout: ", user);
+  // console.log("user from writer layout: ", user);
 
   if (!user) {
     redirect('/login?redirect=/dashboard/writer');

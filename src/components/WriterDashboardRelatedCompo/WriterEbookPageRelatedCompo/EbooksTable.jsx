@@ -21,7 +21,7 @@ export default function EbooksTable({ ebooks, onTogglePublish, onDelete, updatin
         </thead>
         <tbody>
           {ebooks.map((ebook) => (
-            <tr key={ebook.id} className="border-b border-[var(--border)] last:border-0">
+            <tr key={ebook._id} className="border-b border-[var(--border)] last:border-0">
               <td className="px-5 py-3">
                 <div className="h-14 w-10 overflow-hidden rounded-md bg-[var(--background-secondary)]">
                   {ebook.coverImage ? (
@@ -32,19 +32,20 @@ export default function EbooksTable({ ebooks, onTogglePublish, onDelete, updatin
               </td>
               <td className="px-3 py-3 font-medium text-[var(--text-primary)]">{ebook.title}</td>
               <td className="px-3 py-3 text-[var(--text-secondary)]">{ebook.genre}</td>
-              <td className="px-3 py-3 text-[var(--text-primary)]">${ebook.price.toFixed(2)}</td>
-              <td className="px-3 py-3"><StatusBadge status={ebook.status} /></td>
-              <td className="px-3 py-3 text-[var(--text-secondary)]">{ebook.sales}</td>
+              <td className="px-3 py-3 text-[var(--text-primary)]">${ebook.price}</td>
+              <td className="px-3 py-3"><StatusBadge status={ebook.publishingStatus} /></td>
+              <td className="px-3 py-3 text-[var(--text-secondary)]">salesCount</td>
               <td className="px-3 py-3 text-[var(--text-secondary)]">
-                {new Date(ebook.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                {new Date(ebook.uploadedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </td>
               <td className="px-5 py-3 text-right">
-                <EbookRowActions
+                {/* <EbookRowActions
                   ebook={ebook}
                   onTogglePublish={onTogglePublish}
                   onDelete={onDelete}
                   isUpdating={updatingId === ebook.id}
-                />
+                /> */}
+                row actions
               </td>
             </tr>
           ))}

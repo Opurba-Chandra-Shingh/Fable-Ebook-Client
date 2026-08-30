@@ -3,6 +3,8 @@
 import { getBookByID, getRelatedBooksByGenre } from "@/api/books";
 import EbookDetailsView from "./EbookDetailsView";
 import { getWriterById } from "@/api/writer";
+import { getUserSession } from "@/session/session";
+import { getAllBookmarkedBooks } from "@/api/bookmaks";
 
 
 
@@ -25,6 +27,8 @@ import { getWriterById } from "@/api/writer";
 
 export default async function EbookDetailsPage({ params }) {
 
+    const currentUser = await getUserSession();
+
     const { id } = await params;
     // console.log("id from details page: ", id);
 
@@ -42,6 +46,8 @@ export default async function EbookDetailsPage({ params }) {
     const relatedBooks = await getRelatedBooksByGenre(ebook.genre);
     // console.log("Related books from details page: ", relatedBooks);
 
+    const bookmarkedBooks = await getAllBookmarkedBooks();
 
-    return <EbookDetailsView ebook={ebook} writer={writer} relatedBooks={relatedBooks}/>;
+
+    return <EbookDetailsView ebook={ebook} writer={writer} relatedBooks={relatedBooks} currentUser={currentUser} bookmarkedBooks={bookmarkedBooks}/>;
 }

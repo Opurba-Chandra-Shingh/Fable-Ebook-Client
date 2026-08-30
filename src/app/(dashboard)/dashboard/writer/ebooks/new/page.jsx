@@ -1,5 +1,6 @@
 // app/dashboard/writer/ebooks/new/page.jsx
 
+import { getUserSession } from "@/session/session";
 import AddEbookForm from "./AddEbookForm";
 
 
@@ -7,6 +8,10 @@ export const metadata = {
   title: 'Create a New Ebook — Fable',
 };
 
-export default function AddEbookPage() {
-  return <AddEbookForm />;
+export default async function AddEbookPage() {
+
+  const writer = await getUserSession();
+
+
+  return <AddEbookForm writer={writer}/>;
 }

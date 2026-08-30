@@ -5,33 +5,56 @@ import { useState } from 'react';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-// import { useAuth } from '@/hooks/use-auth';
-// import { toggleBookmark } from '@/lib/api';
-// import { showToast } from '@/lib/toast';
+import { addToBookmark } from '@/action/bookmarks';
+import { showToast } from '@/lib/toast';
 
-export default function BookmarkButton({ ebookId, initialBookmarked = false }) {
-//   const { user } = useAuth();
+export default function BookmarkButton({
+  ebook,
+  currentUser,
+  bookmarkedBooks = [],
+}) {
   const router = useRouter();
-  const [bookmarked, setBookmarked] = useState(initialBookmarked);
+
+  const [bookmarked, setBookmarked] = useState(() =>
+    currentUser
+      ? bookmarkedBooks.some(
+          (book) =>
+            book._id === ebook._id &&
+            book.bookmarkedBy === currentUser.id
+        )
+      : false
+  );
+
   const [isPending, setIsPending] = useState(false);
 
   async function handleClick() {
-    if (!user) {
+    if (!currentUser) {
       showToast.error('Please log in to save books.');
-      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      router.push(`/login?redirect=/browse/${ebook._id}`);
       return;
     }
 
     if (isPending) return;
+
     setIsPending(true);
 
-    const next = !bookmarked;
-    setBookmarked(next); // optimistic
     try {
-      await toggleBookmark(ebookId);
-      showToast.success(next ? 'Saved to your bookmarks.' : 'Removed from bookmarks.');
-    } catch {
-      setBookmarked(!next); // revert
+      if (!bookmarked) {
+        const bookmarkBook = {
+          ...ebook,
+          bookmarkedBy: currentUser.id,
+          bookmarkedAt: new Date(),
+        };
+
+        const response = await addToBookmark(bookmarkBook);
+
+        if (response.insertedId) {
+          setBookmarked(true);
+          alert('Added to Bookmarked');
+        }
+      }
+    } catch (error) {
+      console.error('Bookmark error:', error);
       showToast.error('Something went wrong. Please try again.');
     } finally {
       setIsPending(false);
@@ -57,8 +80,13 @@ export default function BookmarkButton({ ebookId, initialBookmarked = false }) {
         transition={{ duration: 0.2 }}
         className="flex"
       >
-        {bookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}
+        {bookmarked ? (
+          <BookmarkCheck size={17} />
+        ) : (
+          <Bookmark size={17} />
+        )}
       </motion.span>
+
       {bookmarked ? 'Saved' : 'Add to Bookmarks'}
     </button>
   );
