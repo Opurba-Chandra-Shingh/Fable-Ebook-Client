@@ -1,5 +1,6 @@
 // app/register/page.jsx
 
+import { Suspense } from 'react';
 import { BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import RegisterForm from './RegisterForm';
@@ -71,7 +72,9 @@ export default function RegisterPage() {
           </span>
         </div>
 
-        <RegisterForm />
+        <Suspense fallback={null}>
+          <RegisterForm />
+        </Suspense>
       </div>
     </main>
   );

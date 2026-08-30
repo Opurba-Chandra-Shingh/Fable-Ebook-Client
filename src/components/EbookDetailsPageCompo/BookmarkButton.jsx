@@ -17,11 +17,7 @@ export default function BookmarkButton({
 
   const [bookmarked, setBookmarked] = useState(() =>
     currentUser
-      ? bookmarkedBooks.some(
-          (book) =>
-            book._id === ebook._id &&
-            book.bookmarkedBy === currentUser.id
-        )
+      ? bookmarkedBooks.some((book) => book.bookId === ebook._id)
       : false
   );
 
@@ -40,17 +36,11 @@ export default function BookmarkButton({
 
     try {
       if (!bookmarked) {
-        const bookmarkBook = {
-          ...ebook,
-          bookmarkedBy: currentUser.id,
-          bookmarkedAt: new Date(),
-        };
-
-        const response = await addToBookmark(bookmarkBook);
+        const response = await addToBookmark(ebook._id);
 
         if (response.insertedId) {
           setBookmarked(true);
-          alert('Added to Bookmarked');
+          showToast.success('Added to bookmarks.');
         }
       }
     } catch (error) {

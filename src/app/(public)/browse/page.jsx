@@ -1,43 +1,9 @@
 // app/browse/page.jsx
 
-import { getAllBooks } from "@/api/books";
+import { searchBooks } from "@/api/books";
 import BookCard from "@/components/Shared/BookCard";
-
-
-const books = [
-    {
-        slug: 'slow-craft',
-        coverImage: '/images/books/slow-craft.jpg',
-        category: 'Self Development',
-        title: 'Slow Craft',
-        author: 'Amara Osei',
-        price: 6.99,
-    },
-    {
-        slug: 'monsoon-interrupted',
-        coverImage: '/images/books/monsoon-interrupted.jpg',
-        category: 'Romance',
-        title: 'Monsoon, Interrupted',
-        author: 'Nadia Rahman',
-        price: 7.99,
-    },
-    {
-        slug: 'glasshouse-kingdom',
-        coverImage: '/images/books/glasshouse-kingdom.jpg',
-        category: 'Fantasy',
-        title: 'Glasshouse Kingdom',
-        author: 'Ingrid Solheim',
-        price: 8.75,
-    },
-    {
-        slug: 'the-weight-of-almost',
-        coverImage: '/images/books/weight-of-almost.jpg',
-        category: 'Poetry',
-        title: 'The Weight of Almost',
-        author: 'Rafael Duarte',
-        price: 6.5,
-    },
-];
+import BrowseFilters from "@/components/BrowsePageCompo/BrowseFilters";
+import BrowsePagination from "@/components/BrowsePageCompo/BrowsePagination";
 
 export const metadata = {
     title: 'Explore Ebooks — Fable',
@@ -45,10 +11,10 @@ export const metadata = {
         'Discover original stories, fresh perspectives, and unforgettable reads from independent writers.',
 };
 
-export default async function BrowsePage() {
+export default async function BrowsePage({ searchParams }) {
 
-    const books = await getAllBooks();
-    // console.log("Books from Latest Ebook browse", books);
+    const params = await searchParams;
+    const { data: books, total, page, totalPages } = await searchBooks(params);
 
     return (
         <div className="mx-auto max-w-content px-6 py-12 md:px-10 md:py-16">
@@ -63,11 +29,32 @@ export default async function BrowsePage() {
                 reads from independent writers.
             </p>
 
-            <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-                {books.map((book) => (
-                    <BookCard key={book._id} book={book} />
-                ))}
+            <div className="mt-8">
+                <BrowseFilters />
             </div>
+
+            {books.length === 0 ? (
+                <div className="mt-16 flex flex-col items-center text-center">
+                    <h3 className="font-serif text-xl font-medium text-[var(--text-primary)]">
+                        No stories found.
+                    </h3>
+                    <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                        Try adjusting your search or filters.
+                    </p>
+                </div>
+            ) : (
+                <>
+                    <p className="mt-6 text-sm text-[var(--text-secondary)]">
+                        {total} {total === 1 ? 'story' : 'stories'} found
+                    </p>
+                    <div className="mt-4 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+                        {books.map((book) => (
+                            <BookCard key={book._id} book={book} />
+                        ))}
+                    </div>
+                    <BrowsePagination page={page} totalPages={totalPages} searchParams={params} />
+                </>
+            )}
         </div>
     );
 }

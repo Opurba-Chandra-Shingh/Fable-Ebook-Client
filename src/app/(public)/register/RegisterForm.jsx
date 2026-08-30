@@ -15,10 +15,11 @@ import {
 import { Eye, EyeOff, Loader2, BookOpen, PenLine, Check } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { authClient } from '@/lib/auth-client';
+import { showToast } from '@/lib/toast';
 
 
 const ROLE_REDIRECTS = {
-  reader: '/dashboard/user',
+  reader: '/dashboard/reader',
   writer: '/dashboard/writer',
 };
 
@@ -61,9 +62,8 @@ const STRENGTH_STYLES = {
 };
 
 export default function RegisterForm() {
-  //   const router = useRouter();
-  //   const searchParams = useSearchParams();
-  //   const { register, loginWithGoogle } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [role, setRole] = useState('reader');
   const [password, setPassword] = useState('');
@@ -82,7 +82,7 @@ export default function RegisterForm() {
 
   function redirectAfterRegister(selectedRole) {
     const redirectTo = searchParams.get('redirect');
-    const destination = redirectTo || ROLE_REDIRECTS[selectedRole] || '/dashboard/user';
+    const destination = redirectTo || ROLE_REDIRECTS[selectedRole] || '/dashboard/reader';
 
     router.push(destination);
   }
@@ -121,14 +121,6 @@ export default function RegisterForm() {
       return;
     }
 
-    console.log('Register Data:', {
-      fullName,
-      image,
-      email,
-      password,
-      role: selectedRole,
-    });
-
     setIsSubmitting(true);
 
     try {
@@ -141,18 +133,12 @@ export default function RegisterForm() {
       });
 
       if (error) {
-        console.error('Signup Error:', error);
         throw new Error(error.message || 'Unable to create your account.');
       }
 
-      console.log('Signup Success:', data);
-
-      alert('Signup successful!');
-
-      // redirectAfterRegister(data?.user?.role || selectedRole);
+      showToast.success('Registration successful.');
+      redirectAfterRegister(data?.user?.role || selectedRole);
     } catch (error) {
-      console.error('Signup Error:', error);
-
       setFormError(error?.message || 'Unable to create your account. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -164,14 +150,9 @@ export default function RegisterForm() {
     setIsGoogleLoading(true);
 
     try {
-      const { role: assignedRole } = await loginWithGoogle();
-
-      showToast.success('Welcome to Fable.');
-      redirectAfterRegister(assignedRole || 'reader');
+      await authClient.signIn.social({ provider: 'google', callbackURL: '/' });
     } catch (err) {
       setFormError('Unable to create your account. Please try again.');
-      showToast.error('Unable to create your account. Please try again.');
-    } finally {
       setIsGoogleLoading(false);
     }
   }

@@ -5,22 +5,23 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 import { showToast } from '@/lib/toast';
+import { updateProfile } from '@/action/users';
 import AvatarUploader from './AvatarUploader';
 
 
-export default function ProfileForm({ profile, onSaved }) {
+export default function ProfileForm({ profile, onSaved, bioHint = 'This bio will appear on your public writer profile.' }) {
   const [form, setForm] = useState({
     name: profile.name || '',
-    avatarUrl: profile.avatarUrl || '',
+    avatarUrl: profile.image || '',
     bio: profile.bio || '',
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-//   function update(field, value) {
-//     setForm((prev) => ({ ...prev, [field]: value }));
-//     setErrors((prev) => ({ ...prev, [field]: undefined }));
-//   }
+  function update(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  }
 
   function validate() {
     const next = {};
@@ -29,25 +30,25 @@ export default function ProfileForm({ profile, onSaved }) {
     return Object.keys(next).length === 0;
   }
 
-//   async function handleSubmit(e) {
-//     e.preventDefault();
-//     if (isSubmitting || !validate()) return;
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (isSubmitting || !validate()) return;
 
-//     setIsSubmitting(true);
-//     try {
-//       const updated = await updateWriterProfile({
-//         name: form.name.trim(),
-//         avatarUrl: form.avatarUrl,
-//         bio: form.bio.trim(),
-//       });
-//       showToast.success('Profile updated successfully.');
-//       onSaved(updated);
-//     } catch {
-//       showToast.error('Unable to update profile. Please try again.');
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   }
+    setIsSubmitting(true);
+    try {
+      await updateProfile({
+        name: form.name.trim(),
+        image: form.avatarUrl,
+        bio: form.bio.trim(),
+      });
+      showToast.success('Profile updated successfully.');
+      onSaved?.(form);
+    } catch {
+      showToast.error('Unable to update profile. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <section className="rounded-card border border-[var(--border)] bg-[var(--surface)] p-6">
@@ -55,7 +56,7 @@ export default function ProfileForm({ profile, onSaved }) {
         Profile Information
       </h2>
 
-      <form className="mt-5 space-y-6">
+      <form onSubmit={handleSubmit} className="mt-5 space-y-6">
         <div>
           <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
             Profile Picture
@@ -95,7 +96,7 @@ export default function ProfileForm({ profile, onSaved }) {
           />
           <div className="mt-1.5 flex items-center justify-between">
             <p className="text-xs text-[var(--text-secondary)]">
-              This bio will appear on your public writer profile.
+              {bioHint}
             </p>
             <span className="text-xs text-[var(--text-secondary)]">{form.bio.length}/400</span>
           </div>

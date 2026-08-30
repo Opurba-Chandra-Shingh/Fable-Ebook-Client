@@ -5,42 +5,41 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, ShoppingBag } from 'lucide-react';
 import { useSession } from '@/lib/auth-client';
-// import { createCheckoutSession } from '@/lib/api';
-// import { showToast } from '@/lib/toast';
+import { createCheckoutSession } from '@/action/purchases';
+import { showToast } from '@/lib/toast';
 
-export default function PurchasePanel({ ebook }) {
+export default function PurchasePanel({ ebook, isPurchased }) {
 
 
     const SessionRes = useSession();
     const user = SessionRes?.data?.user;
-    // console.log("CurrentUser from Purchased: ", user)
 
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const isOwner = user && user.id === ebook.writerId;
-//   const isPurchased = !!ebook.isPurchasedByCurrentUser;
-  const isAvailable = ebook.status !== 'unavailable' && ebook.status !== 'sold';
+  const isAvailable = ebook.status !== 'unavailable' && ebook.status !== 'Sold';
 
   async function handleBuyNow() {
-    // if (!user) {
-    //   router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
-    //   return;
-    // }
-    // if (isRedirecting) return;
+    if (!user) {
+      router.push(`/login?redirect=${encodeURIComponent(`/browse/${ebook._id}`)}`);
+      return;
+    }
+    if (isRedirecting) return;
 
-    // setIsRedirecting(true);
-    // try {
-    //   const { url } = await createCheckoutSession(ebook.id);
-    //   window.location.href = url; // hand off to Stripe Checkout
-    // } catch (err) {
-    //   if (err?.code === 'ALREADY_PURCHASED') {
-    //     showToast.error('You already own this ebook.');
-    //   } else {
-    //     showToast.error('Unable to start checkout. Please try again.');
-    //   }
-    //   setIsRedirecting(false);
-    // }
+    setIsRedirecting(true);
+    try {
+      const { url, message } = await createCheckoutSession(ebook._id);
+      if (!url) {
+        showToast.error(message || 'Payments are not configured yet.');
+        setIsRedirecting(false);
+        return;
+      }
+      window.location.href = url; // hand off to Stripe Checkout
+    } catch (err) {
+      showToast.error(err?.message || 'Unable to start checkout. Please try again.');
+      setIsRedirecting(false);
+    }
   }
 
   // Not logged in
@@ -75,22 +74,22 @@ export default function PurchasePanel({ ebook }) {
   }
 
   // Already purchased
-//   if (isPurchased) {
-//     return (
-//       <div className="space-y-2.5">
-//         <p className="text-center text-sm font-medium text-[var(--accent)]">
-//           Already Purchased
-//         </p>
-//         <button
-//           type="button"
-//           onClick={() => router.push(`/read/${ebook._id}`)}
-//           className="w-full rounded-btn border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:bg-[var(--background-secondary)]"
-//         >
-//           Read Ebook
-//         </button>
-//       </div>
-//     );
-//   }
+  if (isPurchased) {
+    return (
+      <div className="space-y-2.5">
+        <p className="text-center text-sm font-medium text-[var(--accent)]">
+          Already Purchased
+        </p>
+        <button
+          type="button"
+          onClick={() => router.push(`/read/${ebook._id}`)}
+          className="w-full rounded-btn border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:bg-[var(--background-secondary)]"
+        >
+          Read Ebook
+        </button>
+      </div>
+    );
+  }
 
   // Sold / unavailable
   if (!isAvailable) {

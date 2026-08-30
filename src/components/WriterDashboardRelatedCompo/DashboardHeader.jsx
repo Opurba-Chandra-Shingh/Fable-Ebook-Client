@@ -8,7 +8,11 @@ import { hndlSignOut } from '@/session/signOut';
 import { useRouter } from 'next/navigation';
 
 
-export default function DashboardHeader({ user }) {
+export default function DashboardHeader({
+  user,
+  subtitle = 'Create stories, reach readers, and grow your audience.',
+  profileHref = '/dashboard/writer/profile',
+}) {
     const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -16,10 +20,10 @@ export default function DashboardHeader({ user }) {
     <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--background)] px-6 py-5 md:px-10">
       <div className="ml-10 lg:ml-0">
         <h1 className="font-serif text-2xl font-medium text-[var(--text-primary)] md:text-3xl">
-          Good to see you, {user?.name?.split(' ')[0] || 'Writer'}.
+          Good to see you, {user?.name?.split(' ')[0] || 'there'}.
         </h1>
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
-          Create stories, reach readers, and grow your audience.
+          {subtitle}
         </p>
       </div>
 
@@ -54,7 +58,7 @@ export default function DashboardHeader({ user }) {
           {menuOpen && (
             <div className="absolute right-0 top-11 z-30 w-48 rounded-card border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-subtle">
               <Link
-                href="/dashboard/writer/profile"
+                href={profileHref}
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-2 rounded-btn px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background-secondary)]"
               >

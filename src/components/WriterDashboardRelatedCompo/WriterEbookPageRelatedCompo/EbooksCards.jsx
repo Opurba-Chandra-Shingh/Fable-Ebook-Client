@@ -26,14 +26,14 @@ export default function EbooksCards({ ebooks, onTogglePublish, onDelete, updatin
                   ebook={ebook}
                   onTogglePublish={onTogglePublish}
                   onDelete={onDelete}
-                  isUpdating={updatingId === ebook.id}
+                  isUpdating={updatingId === ebook._id}
                 />
               </div>
               <div className="mt-1.5">
-                <StatusBadge status={ebook.status} />
+                <StatusBadge status={ebook.publishingStatus} />
               </div>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                ${ebook.price} · {ebook.sales} sales
+                ${ebook.price} · {ebook.sales ?? 0} sales
               </p>
             </div>
           </div>

@@ -1,10 +1,9 @@
 // components/dashboard/writer/ebooks/my-ebooks-client.jsx
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import EbooksSkeleton from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EbooksSkeleton';
 import DashboardError from '@/components/WriterDashboardRelatedCompo/DashboardError';
 import EmptyEbooks from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EmptyEbooks';
 import EbooksTable from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EbooksTable';
@@ -12,205 +11,85 @@ import EbooksCards from '@/components/WriterDashboardRelatedCompo/WriterEbookPag
 import DeleteConfirmDialog from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/DeleteConfirmDialog';
 import SummaryStats from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/SummaryStats';
 import EbooksToolbar from '@/components/WriterDashboardRelatedCompo/WriterEbookPageRelatedCompo/EbooksToolbar';
-
-
-
-
-
-
-// lib/dummy-writer-ebooks.js
-// Temporary dummy data — matches the shape returned by getWriterEbooks()
-// Use this to preview SummaryStats, EbooksToolbar, EbooksTable, EbooksCards
-// before the real /api/dashboard/writer/ebooks endpoint is ready.
-
-export const dummyWriterEbooks = {
-    summary: {
-        total: 9,
-        published: 6,
-        unpublished: 3,
-        totalSales: 342,
-    },
-
-    items: [
-        {
-            id: 'ebook_1',
-            title: 'Glasshouse Kingdom',
-            coverImage: '/images/books/glasshouse-kingdom.jpg',
-            genre: 'Fantasy',
-            price: 8.75,
-            status: 'published',
-            sales: 128,
-            createdAt: '2026-05-12',
-        },
-        {
-            id: 'ebook_2',
-            title: 'The Weight of Almost',
-            coverImage: '/images/books/weight-of-almost.jpg',
-            genre: 'Poetry',
-            price: 6.5,
-            status: 'published',
-            sales: 96,
-            createdAt: '2026-04-03',
-        },
-        {
-            id: 'ebook_3',
-            title: 'Slow Craft',
-            coverImage: '/images/books/slow-craft.jpg',
-            genre: 'Self Development',
-            price: 6.99,
-            status: 'published',
-            sales: 74,
-            createdAt: '2026-03-21',
-        },
-        {
-            id: 'ebook_4',
-            title: 'Nine Minutes Past',
-            coverImage: null,
-            genre: 'Thriller',
-            price: 10.25,
-            status: 'published',
-            sales: 21,
-            createdAt: '2026-06-08',
-        },
-        {
-            id: 'ebook_5',
-            title: 'Cartographers of the Long Road',
-            coverImage: '/images/books/cartographers.jpg',
-            genre: 'History',
-            price: 12.0,
-            status: 'published',
-            sales: 15,
-            createdAt: '2026-07-02',
-        },
-        {
-            id: 'ebook_6',
-            title: 'The House Listens Back',
-            coverImage: null,
-            genre: 'Horror',
-            price: 10.99,
-            status: 'published',
-            sales: 8,
-            createdAt: '2026-07-19',
-        },
-        {
-            id: 'ebook_7',
-            title: 'Monsoon, Interrupted (Draft)',
-            coverImage: '/images/books/monsoon-interrupted.jpg',
-            genre: 'Romance',
-            price: 7.99,
-            status: 'unpublished',
-            sales: 0,
-            createdAt: '2026-08-15',
-        },
-        {
-            id: 'ebook_8',
-            title: 'Untitled Mystery Project',
-            coverImage: null,
-            genre: 'Mystery',
-            price: 9.5,
-            status: 'unpublished',
-            sales: 0,
-            createdAt: '2026-08-20',
-        },
-        {
-            id: 'ebook_9',
-            title: 'The Last Winter Protocol — Revised',
-            coverImage: '/images/books/last-winter-protocol.jpg',
-            genre: 'Science Fiction',
-            price: 13.5,
-            status: 'unpublished',
-            sales: 0,
-            createdAt: '2026-08-25',
-        },
-    ],
-};
-
-// // Extra export for testing the empty-library state
-// export const dummyWriterEbooksEmpty = {
-//   summary: { total: 0, published: 0, unpublished: 0, totalSales: 0 },
-//   items: [],
-// };
-
-
+import { showToast } from '@/lib/toast';
+import { deleteBook, updateBook } from '@/action/books';
 
 
 export default function WriterEbooksClient({ books, user }) {
+    const [ebooks, setEbooks] = useState(() => books.filter((book) => book.writerId === user.id));
     const [filters, setFilters] = useState({ search: '', status: '', sort: 'newest' });
     const [updatingId, setUpdatingId] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-
-
-    const AllBooksForThisWriter = books.filter(book => user.id === book.writerId);
-    const [filterBooks, setFilterBooks] = useState(AllBooksForThisWriter);
-
-
-    const publishedBooksForThisWriter = AllBooksForThisWriter.filter(book => book.publishingStatus === "published");
-    const [publishedBooks, setPublishedBooks] = useState(AllBooksForThisWriter);
-
-    const UnPublishedBooksForThisWriter = AllBooksForThisWriter.filter(book => book.publishingStatus === "unpublished");
-    const [unpublishedBooks, setUnpublishedBooks] = useState(AllBooksForThisWriter);
-
-    // console.log("Published books from WriterEbooksClient: ", publishedBooksForThisWriter.length);
-    // console.log("UnPublished books from WriterEbooksClient: ", UnPublishedBooksForThisWriter.length);
-
     const summary = {
-        total: AllBooksForThisWriter.length,
-        published: publishedBooksForThisWriter.length,
-        unpublished: UnPublishedBooksForThisWriter.length,
+        total: ebooks.length,
+        published: ebooks.filter((book) => book.publishingStatus === 'published').length,
+        unpublished: ebooks.filter((book) => book.publishingStatus === 'unpublished').length,
         totalSales: 0,
-    }
+    };
 
-
-
-
-    function handleFilterChange(updatedFiled) {
-        setFilters((prev) => ({ ...prev, ...updatedFiled }));
-
-
-        const filteredAndSortedBooks = AllBooksForThisWriter
+    const filterBooks = useMemo(() => {
+        return ebooks
             .filter((book) => {
                 const matchesSearch =
                     !filters.search ||
-                    book.title
-                        .toLowerCase()
-                        .includes(filters.search.toLowerCase());
+                    book.title.toLowerCase().includes(filters.search.toLowerCase());
 
                 const matchesStatus =
-                    !filters.status ||
-                    book.publishingStatus === filters.status;
+                    !filters.status || book.publishingStatus === filters.status;
 
                 return matchesSearch && matchesStatus;
             })
             .sort((a, b) => {
                 if (filters.sort === 'newest') {
-                    return (
-                        new Date(b.uploadedAt) -
-                        new Date(a.uploadedAt)
-                    );
+                    return new Date(b.uploadedAt) - new Date(a.uploadedAt);
                 }
-
                 if (filters.sort === 'oldest') {
-                    return (
-                        new Date(a.uploadedAt) -
-                        new Date(b.uploadedAt)
-                    );
+                    return new Date(a.uploadedAt) - new Date(b.uploadedAt);
                 }
-
+                if (filters.sort === 'price') {
+                    return b.price - a.price;
+                }
                 return 0;
             });
+    }, [ebooks, filters]);
 
-        setFilterBooks(filteredAndSortedBooks);
-
+    function handleFilterChange(updatedField) {
+        setFilters((prev) => ({ ...prev, ...updatedField }));
     }
 
     async function handleTogglePublish(ebook) {
-        
+        const nextStatus = ebook.publishingStatus === 'published' ? 'unpublished' : 'published';
+
+        setUpdatingId(ebook._id);
+        try {
+            await updateBook(ebook._id, { publishingStatus: nextStatus });
+            setEbooks((prev) =>
+                prev.map((b) => (b._id === ebook._id ? { ...b, publishingStatus: nextStatus } : b))
+            );
+            showToast.success(nextStatus === 'published' ? 'Ebook published.' : 'Ebook unpublished.');
+        } catch (error) {
+            showToast.error('Unable to update this ebook. Please try again.');
+        } finally {
+            setUpdatingId(null);
+        }
     }
 
     async function handleConfirmDelete() {
-       
+        if (!deleteTarget) return;
+
+        setIsDeleting(true);
+        try {
+            await deleteBook(deleteTarget._id);
+            setEbooks((prev) => prev.filter((b) => b._id !== deleteTarget._id));
+            showToast.success('Ebook deleted.');
+            setDeleteTarget(null);
+        } catch (error) {
+            showToast.error('Unable to delete this ebook. Please try again.');
+        } finally {
+            setIsDeleting(false);
+        }
     }
 
     return (
@@ -234,12 +113,9 @@ export default function WriterEbooksClient({ books, user }) {
                 </Link>
             </div>
 
-            {summary && (
-                <div className="mt-6">
-                    <SummaryStats summary={summary} />
-                </div>
-            )}
-
+            <div className="mt-6">
+                <SummaryStats summary={summary} />
+            </div>
 
             <div className="mt-6">
                 <EbooksToolbar filters={filters} onChange={handleFilterChange} />
@@ -266,12 +142,12 @@ export default function WriterEbooksClient({ books, user }) {
                 )}
             </div>
 
-            {/* <DeleteConfirmDialog
+            <DeleteConfirmDialog
                 ebook={deleteTarget}
                 isDeleting={isDeleting}
                 onCancel={() => setDeleteTarget(null)}
                 onConfirm={handleConfirmDelete}
-            /> */}
+            />
         </div>
     );
 }

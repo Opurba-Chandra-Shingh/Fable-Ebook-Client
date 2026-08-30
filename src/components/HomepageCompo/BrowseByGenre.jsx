@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from 'react';
+import Link from 'next/link';
 
 const GENRES = [
   'Fiction',
@@ -18,8 +16,6 @@ const GENRES = [
 ];
 
 export default function BrowseByGenre() {
-  const [activeGenre, setActiveGenre] = useState(null);
-
   return (
     <section className="bg-background-secondary">
       <div className="mx-auto max-w-content px-6 py-16 md:px-10">
@@ -31,34 +27,15 @@ export default function BrowseByGenre() {
 
         {/* Genre buttons */}
         <div className="mt-5 flex flex-wrap gap-3">
-          {GENRES.map((genre) => {
-            const isActive = activeGenre === genre;
-
-            return (
-              <button
-                key={genre}
-                type="button"
-                onClick={() => setActiveGenre(genre)}
-                className={`
-                  rounded-full
-                  border
-                  px-4 py-2
-                  text-sm
-                  font-medium
-                  transition-colors
-                  ${
-                    isActive
-                      ? 'border-accent bg-accent/10 text-accent'
-                      : 'border-badge-border bg-badge-bg text-badge-text hover:border-accent hover:text-accent'
-                  }
-                  text-[var(--text-secondary)]
-                  hover:text-[var(--text-primary)]
-                `}
-              >
-                {genre}
-              </button>
-            );
-          })}
+          {GENRES.map((genre) => (
+            <Link
+              key={genre}
+              href={`/browse?genre=${encodeURIComponent(genre)}`}
+              className="rounded-full border border-badge-border bg-badge-bg px-4 py-2 text-sm font-medium text-badge-text transition-colors hover:border-accent hover:text-accent"
+            >
+              {genre}
+            </Link>
+          ))}
         </div>
 
         {/* Description */}

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 import { showToast } from '@/lib/toast';
+import { authClient } from '@/lib/auth-client';
 
 const fieldClass =
   'w-full rounded-input border bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--accent)]/40';
@@ -38,14 +39,20 @@ export default function ChangePasswordSection() {
 
     setIsSubmitting(true);
     try {
-      await changePassword({
+      const { error } = await authClient.changePassword({
         currentPassword: form.currentPassword,
         newPassword: form.newPassword,
+        revokeOtherSessions: true,
       });
+
+      if (error) {
+        throw new Error(error.message, { cause: error.code });
+      }
+
       showToast.success('Password updated successfully.');
       setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      if (err?.code === 'INCORRECT_PASSWORD') {
+      if (err?.cause === 'INVALID_PASSWORD') {
         setErrors({ currentPassword: 'Current password is incorrect.' });
       } else {
         showToast.error('Unable to update password. Please try again.');

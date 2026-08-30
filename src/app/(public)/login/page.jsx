@@ -1,5 +1,6 @@
 // app/login/page.jsx
 
+import { Suspense } from 'react';
 import { BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import LoginForm from './LoginForm';
@@ -91,7 +92,9 @@ export default function LoginPage() {
           </span>
         </div>
 
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   );

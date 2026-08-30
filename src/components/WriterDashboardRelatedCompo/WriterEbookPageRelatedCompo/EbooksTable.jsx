@@ -34,18 +34,17 @@ export default function EbooksTable({ ebooks, onTogglePublish, onDelete, updatin
               <td className="px-3 py-3 text-[var(--text-secondary)]">{ebook.genre}</td>
               <td className="px-3 py-3 text-[var(--text-primary)]">${ebook.price}</td>
               <td className="px-3 py-3"><StatusBadge status={ebook.publishingStatus} /></td>
-              <td className="px-3 py-3 text-[var(--text-secondary)]">salesCount</td>
+              <td className="px-3 py-3 text-[var(--text-secondary)]">{ebook.sales ?? 0}</td>
               <td className="px-3 py-3 text-[var(--text-secondary)]">
                 {new Date(ebook.uploadedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </td>
               <td className="px-5 py-3 text-right">
-                {/* <EbookRowActions
+                <EbookRowActions
                   ebook={ebook}
                   onTogglePublish={onTogglePublish}
                   onDelete={onDelete}
-                  isUpdating={updatingId === ebook.id}
-                /> */}
-                row actions
+                  isUpdating={updatingId === ebook._id}
+                />
               </td>
             </tr>
           ))}

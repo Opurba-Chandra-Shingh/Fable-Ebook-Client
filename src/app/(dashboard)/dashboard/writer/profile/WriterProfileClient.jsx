@@ -1,51 +1,33 @@
 // components/dashboard/writer/profile/writer-profile-client.jsx
 'use client';
 
-import DashboardError from '@/components/WriterDashboardRelatedCompo/DashboardError';
 import ChangePasswordSection from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/ChangePasswordSection';
 import ProfileForm from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/ProfileForm';
 import ProfileHeader from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/ProfileHeader';
 import ProfileSkeleton from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/ProfileSkeleton';
 import PublicProfilePreview from '@/components/WriterDashboardRelatedCompo/WriterProfileRelatedCompo/PublicProfilePreview';
 import { useSession } from '@/lib/auth-client';
-import { useCallback, useEffect, useState } from 'react';
-// import { getWriterProfile } from '@/lib/api';
+import { useState } from 'react';
 
 
 export default function WriterProfileClient() {
-    const { data: session } = useSession();
+    const { data: session, isPending } = useSession();
+    const [localOverride, setLocalOverride] = useState(null);
+
+    if (isPending) return <ProfileSkeleton />;
+
     const user = session?.user;
-
-    const profile= {
-        writerId:'writerId',
-        avatarUrl:"avatarUrl",
-        name:"name",
-        bio:"bio"
+    const profile = {
+        ...user,
+        avatarUrl: localOverride?.avatarUrl ?? user?.image,
+        name: localOverride?.name ?? user?.name,
+        bio: localOverride?.bio ?? user?.bio,
+        memberSince: user?.createdAt,
     };
-    const [state, setState] = useState({ status: 'ready', profile: user });
 
-    //   const load = useCallback(async () => {
-    //     setState({ status: 'loading', profile: null });
-    //     try {
-    //       const profile = await getWriterProfile();
-    //       setState({ status: 'ready', profile });
-    //     } catch {
-    //       setState({ status: 'error', profile: null });
-    //     }
-    //   }, []);
-
-    //   useEffect(() => {
-    //     load();
-    //   }, [load]);
-
-    if (state.status === 'loading') return <ProfileSkeleton />;
-    if (state.status === 'error') return <DashboardError onRetry={load} />;
-
-    
-
-    // function handleSaved(updated) {
-    //     setState((prev) => ({ ...prev, profile: { ...prev.profile, ...updated } }));
-    // }
+    function handleSaved(updated) {
+        setLocalOverride(updated);
+    }
 
     return (
         <div className="max-w-4xl">
@@ -62,14 +44,14 @@ export default function WriterProfileClient() {
 
             <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
                 <div className="space-y-6">
-                    <ProfileForm profile={profile} onSaved={null} />
+                    <ProfileForm profile={profile} onSaved={handleSaved} />
                     <ChangePasswordSection />
                 </div>
 
                 <div>
                     <PublicProfilePreview
-                        writerId={profile.id}
-                        avatarUrl={profile.image}
+                        writerId={user?.id}
+                        avatarUrl={profile.avatarUrl}
                         name={profile.name}
                         bio={profile.bio}
                     />

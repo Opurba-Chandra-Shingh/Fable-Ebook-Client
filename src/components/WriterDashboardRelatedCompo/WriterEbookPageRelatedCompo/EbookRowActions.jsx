@@ -9,7 +9,7 @@ export default function EbookRowActions({ ebook, onTogglePublish, onDelete, isUp
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const router = useRouter();
-  const isPublished = ebook.status === 'published';
+  const isPublished = ebook.publishingStatus === 'published';
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -35,14 +35,14 @@ export default function EbookRowActions({ ebook, onTogglePublish, onDelete, isUp
         <div className="absolute right-0 top-9 z-20 w-44 rounded-card border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-subtle">
           <button
             type="button"
-            onClick={() => { setOpen(false); router.push(`/ebooks/${ebook.id}`); }}
+            onClick={() => { setOpen(false); router.push(`/browse/${ebook._id}`); }}
             className="flex w-full items-center gap-2 rounded-btn px-3 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--background-secondary)]"
           >
             <Eye size={15} /> View
           </button>
           <button
             type="button"
-            onClick={() => { setOpen(false); router.push(`/dashboard/writer/ebooks/${ebook.id}/edit`); }}
+            onClick={() => { setOpen(false); router.push(`/dashboard/writer/ebooks/${ebook._id}/edit`); }}
             className="flex w-full items-center gap-2 rounded-btn px-3 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--background-secondary)]"
           >
             <Pencil size={15} /> Edit

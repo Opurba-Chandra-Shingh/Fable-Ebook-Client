@@ -13,17 +13,37 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    //   socialProviders: { 
-    //     github: { 
-    //       clientId: process.env.GITHUB_CLIENT_ID as string, 
-    //       clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
-    //     }
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        },
+    },
     user: {
         additionalFields: {
             role: {
                 type: 'string',
                 required: false,
                 defaultValue: 'reader',
+            },
+            bio: {
+                type: 'string',
+                required: false,
+                defaultValue: '',
+            },
+        },
+    },
+    databaseHooks: {
+        user: {
+            create: {
+                // The public sign-up endpoint would otherwise accept role: 'admin'
+                // straight from the request body. Only 'reader'/'writer' may be
+                // self-selected at sign-up; admins are promoted via the admin panel.
+                before: async (user) => {
+                    if (user.role !== 'writer') {
+                        return { data: { ...user, role: 'reader' } };
+                    }
+                },
             },
         },
     },

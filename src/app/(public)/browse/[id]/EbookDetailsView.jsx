@@ -11,7 +11,7 @@ import RelatedEbooks from '@/components/EbookDetailsPageCompo/RelatedEbooks';
 import { useRouter } from 'next/navigation';
 
 
-export default function EbookDetailsView({ ebook, writer, relatedBooks, currentUser, bookmarkedBooks}) {
+export default function EbookDetailsView({ ebook, writer, relatedBooks, currentUser, bookmarkedBooks, isPurchased}) {
   const [coverFailed, setCoverFailed] = useState(false);
   const isAvailable = ebook.status !== 'unavailable' && ebook.status !== 'sold';
 
@@ -58,7 +58,7 @@ export default function EbookDetailsView({ ebook, writer, relatedBooks, currentU
           transition={{ duration: 0.4, delay: 0.1, ease: 'easeOut' }}
         >
           <span className="inline-block rounded-full border border-[var(--badge-border)] bg-[var(--badge-bg)] px-2.5 py-1 text-[11px] font-medium text-[var(--badge-text)]">
-            {ebook.gnere}
+            {ebook.genre}
           </span>
 
           <h1 className="mt-4 font-serif text-3xl font-medium leading-tight text-[var(--text-primary)] md:text-4xl">
@@ -106,7 +106,7 @@ export default function EbookDetailsView({ ebook, writer, relatedBooks, currentU
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:max-w-md">
             <div className="flex-1">
-              <PurchasePanel ebook={ebook} />
+              <PurchasePanel ebook={ebook} isPurchased={isPurchased} />
             </div>
             <BookmarkButton
               ebook={ebook}
@@ -133,7 +133,7 @@ export default function EbookDetailsView({ ebook, writer, relatedBooks, currentU
 
       {/* Mobile sticky purchase bar */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-[var(--surface)]/95 p-4 backdrop-blur lg:hidden">
-        <PurchasePanel ebook={ebook} />
+        <PurchasePanel ebook={ebook} isPurchased={isPurchased} />
       </div>
     </div>
   );

@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   Form,
@@ -15,22 +14,20 @@ import {
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { authClient } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
+import { showToast } from '@/lib/toast';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 
 
 const ROLE_REDIRECTS = {
-  reader: '/dashboard/user',
+  reader: '/dashboard/reader',
   writer: '/dashboard/writer',
   admin: '/dashboard/admin',
 };
 
 export default function LoginForm() {
-  //   const router = useRouter();
-  //   const searchParams = useSearchParams();
-
   const router = useRouter();
-
+  const searchParams = useSearchParams();
 
   const [formError, setFormError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -60,34 +57,32 @@ export default function LoginForm() {
       }
 
       if (data) {
-        alert('Login successful');
-        router.push('/')
+        showToast.success('Welcome back to Fable.');
+        const redirectTo = searchParams.get('redirect');
+        router.push(redirectTo || ROLE_REDIRECTS[data.user?.role] || '/');
+        router.refresh();
       }
     } catch (err) {
-      const message = err?.message || 'Something went wrong. Please try again.';
+      const message = err?.message === 'Invalid email or password'
+        ? 'Email or password is incorrect.'
+        : (err?.message || 'Something went wrong. Please try again.');
 
-      console.error('Login error:', err);
-      alert(message);
       setFormError(message);
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  //   async function handleGoogleLogin() {
-  //     setFormError('');
-  //     setIsGoogleLoading(true);
-  //     try {
-  //       const { role } = await loginWithGoogle();
-  //       showToast.success('Welcome back to Fable.');
-  //       redirectAfterLogin(role);
-  //     } catch (err) {
-  //       setFormError('Something went wrong. Please try again.');
-  //       showToast.error('Something went wrong. Please try again.');
-  //     } finally {
-  //       setIsGoogleLoading(false);
-  //     }
-  //   }
+  async function handleGoogleLogin() {
+    setFormError('');
+    setIsGoogleLoading(true);
+    try {
+      await authClient.signIn.social({ provider: 'google', callbackURL: '/' });
+    } catch (err) {
+      setFormError('Something went wrong. Please try again.');
+      setIsGoogleLoading(false);
+    }
+  }
 
   const isBusy = isSubmitting || isGoogleLoading;
 
@@ -199,7 +194,7 @@ export default function LoginForm() {
 
       <Button
         type="button"
-        // onPress={handleGoogleLogin}
+        onPress={handleGoogleLogin}
         isDisabled={isBusy}
         className="flex w-full items-center justify-center gap-3 rounded-btn border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--background-secondary)] disabled:cursor-not-allowed disabled:opacity-60"
       >
